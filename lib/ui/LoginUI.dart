@@ -128,6 +128,7 @@ class _LoginUIState extends State<LoginUI> {
         controller: emailController,
         decoration: const InputDecoration(
           hintText: "Email",
+          focusColor: Colors.black,
           hintStyle:
               TextStyle(fontWeight: FontWeight.w300, color: Colors.black),
           //border: OutlineInputBorder(),

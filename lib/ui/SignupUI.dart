@@ -16,12 +16,13 @@ class _SignupUIState extends State<SignupUI> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final phoneNoController = TextEditingController();
-
+  var signupData = Map<String, String>();
   @override
   Widget build(BuildContext context) {
     double scrnWidth = MediaQuery.of(context).size.width;
     double scrnHeight = MediaQuery.of(context).size.height;
     double txtfldHeight = scrnWidth * .15;
+    var inputData = Map<String, String>();
 
     return Scaffold(
       appBar: AppBar(
@@ -122,26 +123,6 @@ class _SignupUIState extends State<SignupUI> {
     ),
   );
 
-  Widget emailTextFieldWidget() {
-    return Container(
-      color: Colors.grey[100],
-      margin: EdgeInsets.symmetric(horizontal: 5),
-      child: TextField(
-        onChanged: (value) {
-          print(value.isValidEmail());
-        },
-        controller: emailController,
-        decoration: const InputDecoration(
-          hintText: "Email",
-          hintStyle:
-              TextStyle(fontWeight: FontWeight.w300, color: Colors.black),
-          //border: OutlineInputBorder(),
-          labelText: 'Email',
-        ),
-      ),
-    );
-  }
-
   Widget aTextFieldWidget(TextEditingController controller, String name,
       String placeHolderText, bool isSecured, double txtFldheight) {
     return Container(
@@ -150,7 +131,8 @@ class _SignupUIState extends State<SignupUI> {
       margin: EdgeInsets.symmetric(horizontal: 5),
       child: TextField(
         onChanged: (value) {
-          print(value.isValidEmail());
+          //print(value.isValidEmail());
+          controllerForUpdatedata(controller, value);
         },
         obscureText: isSecured,
         controller: controller,
@@ -165,22 +147,28 @@ class _SignupUIState extends State<SignupUI> {
     );
   }
 
-  Widget passwordTextFieldWidget() {
-    return Container(
-      color: Colors.grey[100],
-      margin: EdgeInsets.symmetric(horizontal: 5),
-      child: TextField(
-        controller: passwordController,
-        obscureText: true,
-        decoration: const InputDecoration(
-          hintText: "Password",
-          hintStyle:
-              TextStyle(fontWeight: FontWeight.w300, color: Colors.black),
-          // border: OutlineInputBorder(),
-          labelText: 'Password',
-        ),
-      ),
-    );
+/*
+firstName:Amit
+lastName:p
+email:amitjv@gmail.com
+//company:Ap info
+phoneNo:8888899977
+password:amit@1234
+password2:amit@1234
+*/
+  controllerForUpdatedata(TextEditingController controller, String value) {
+    if (controller == firstnameController) {
+      signupData["firstName"] = value;
+    } else if (controller == lastnameController) {
+      signupData["lastName"] = value;
+    } else if (controller == emailController) {
+      signupData["email"] = value;
+    } else if (controller == passwordController) {
+      signupData["password"] = value;
+    } else if (controller == phoneNoController) {
+      signupData["phoneNo"] = value;
+    }
+    print(signupData);
   }
 
   _btnCreatePressed() {
