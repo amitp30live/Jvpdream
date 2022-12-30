@@ -11,61 +11,76 @@ class SignupUI extends StatefulWidget {
 
 class _SignupUIState extends State<SignupUI> {
   final emailController = TextEditingController();
+  final firstnameController = TextEditingController();
+  final lastnameController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  final phoneNoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        // toolbarHeight: 0,
+        title: Text(
+          "SIGNUP",
+          //  style: TextStyle(""),
+        ),
+        backgroundColor: Colors.black87,
+      ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(25),
+        padding: EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //  topLogo(),
-            Container(
-              height: 30,
-            ),
-            _backIcon(context),
+
+            _appIcon(),
             Container(
               height: 10,
             ),
-            _appIcon(),
-            Container(
-              height: 30,
-            ),
-            _textLogin(),
-            Container(
-              height: 30,
-            ),
-            emailTextFieldWidget(),
-            Container(height: 20),
-            passwordTextFieldWidget(),
 
-            Container(height: 20),
-            _btnForgotPassword(context),
+            aTextFieldWidget(
+                firstnameController, "First Name", "First Name", false),
             Container(
-              height: 40,
+              height: 8,
             ),
-            ThemeButton.btnRound("LOGIN", _btnLoginPressed),
-            SizedBox(
-              height: 40,
+            aTextFieldWidget(
+                lastnameController, "Last Name", "Last Name", false),
+            Container(
+              height: 8,
+            ),
+            aTextFieldWidget(emailController, "Email", "Email", false),
+            Container(
+              height: 8,
+            ),
+            aTextFieldWidget(passwordController, "Password", "Password", true),
+            Container(
+              height: 8,
+            ),
+            aTextFieldWidget(confirmPasswordController, "Confirm Password",
+                "Confirm password", true),
+            Container(
+              height: 8,
+            ),
+            aTextFieldWidget(phoneNoController, "Phone No", "Phone No", false),
+
+            //  emailTextFieldWidget(),
+            Container(height: 20),
+
+            ThemeButton.btnRound("Create Account", _btnCreatePressed),
+            Container(
+              height: 20,
             ),
             btnSignupWidget(),
-            SizedBox(
-              height: 50,
+            Container(
+              height: 20,
             ),
           ],
         ),
       ),
     );
-  }
-
-  Widget _backIcon(BuildContext context) {
-    return IconButton(
-        alignment: Alignment.topLeft,
-        icon: Icon(Icons.arrow_back, color: Colors.black),
-        onPressed: () => Navigator.of(context).pop());
   }
 
   Widget _appIcon() {
@@ -133,6 +148,28 @@ class _SignupUIState extends State<SignupUI> {
     );
   }
 
+  Widget aTextFieldWidget(TextEditingController controller, String name,
+      String placeHolderText, bool isSecured) {
+    return Container(
+      color: Colors.grey[100],
+      margin: EdgeInsets.symmetric(horizontal: 5),
+      child: TextField(
+        onChanged: (value) {
+          print(value.isValidEmail());
+        },
+        obscureText: isSecured,
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: name,
+          hintStyle:
+              TextStyle(fontWeight: FontWeight.w300, color: Colors.black),
+          //border: OutlineInputBorder(),
+          labelText: placeHolderText,
+        ),
+      ),
+    );
+  }
+
   Widget passwordTextFieldWidget() {
     return Container(
       color: Colors.grey[100],
@@ -151,12 +188,8 @@ class _SignupUIState extends State<SignupUI> {
     );
   }
 
-  _btnLoginPressed() {
-    print("btn Login Pressed");
-  }
-
-  _btnFogotoPasswordPressed() {
-    print("btn forgot password Pressed");
+  _btnCreatePressed() {
+    print("btn Create Pressed");
   }
 
   Widget btnSignupWidget() {
@@ -164,14 +197,14 @@ class _SignupUIState extends State<SignupUI> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Don't have an account?"),
+          Text("Already have an account.!"),
           TextButton(
-            child: Text('Get Started Now'),
+            child: Text('Login'),
             style: ElevatedButton.styleFrom(
               onPrimary: Colors.black, // foreground
             ),
             onPressed: () {
-              //  Navigator.push(context, MaterialPageRoute(builder: (context) => ));
+              Navigator.pop(context);
             },
           ),
         ],
