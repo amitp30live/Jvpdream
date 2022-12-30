@@ -15,6 +15,9 @@ class _LoginUIState extends State<LoginUI> {
 
   @override
   Widget build(BuildContext context) {
+    double scrnWidth = MediaQuery.of(context).size.width;
+    double scrnHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         // toolbarHeight: 0,
@@ -44,7 +47,7 @@ class _LoginUIState extends State<LoginUI> {
             // Container(
             //   height: 10,
             // ),
-            _appIcon(),
+            CommonWidgets.appIcon(scrnWidth * 0.35),
             Container(
               height: 30,
             ),
@@ -80,19 +83,6 @@ class _LoginUIState extends State<LoginUI> {
         alignment: Alignment.topLeft,
         icon: Icon(Icons.arrow_back, color: Colors.black),
         onPressed: () => Navigator.of(context).pop());
-  }
-
-  Widget _appIcon() {
-    return Center(
-      child: SizedBox(
-        width: 150,
-        height: 150,
-        child: Image.asset(
-          'assets/images/apple.png',
-          color: Colors.black54,
-        ),
-      ),
-    );
   }
 
   Widget _textLogin() {

@@ -24,3 +24,18 @@ class ThemeButton {
     );
   }
 }
+
+class CommonWidgets {
+  static Widget appIcon(double iconWidth) {
+    return Center(
+      child: SizedBox(
+        width: iconWidth,
+        height: iconWidth,
+        child: Image.asset(
+          'assets/images/apple.png',
+          color: Colors.black54,
+        ),
+      ),
+    );
+  }
+}

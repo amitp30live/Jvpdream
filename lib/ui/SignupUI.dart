@@ -19,6 +19,10 @@ class _SignupUIState extends State<SignupUI> {
 
   @override
   Widget build(BuildContext context) {
+    double scrnWidth = MediaQuery.of(context).size.width;
+    double scrnHeight = MediaQuery.of(context).size.height;
+    double txtfldHeight = scrnWidth * .15;
+
     return Scaffold(
       appBar: AppBar(
         // toolbarHeight: 0,
@@ -36,61 +40,51 @@ class _SignupUIState extends State<SignupUI> {
           children: [
             //  topLogo(),
 
-            _appIcon(),
+            CommonWidgets.appIcon(scrnWidth * 0.35),
             Container(
               height: 10,
             ),
 
-            aTextFieldWidget(
-                firstnameController, "First Name", "First Name", false),
+            aTextFieldWidget(firstnameController, "First Name", "First Name",
+                false, txtfldHeight),
+            Container(
+              height: 8,
+            ),
+            aTextFieldWidget(lastnameController, "Last Name", "Last Name",
+                false, txtfldHeight),
             Container(
               height: 8,
             ),
             aTextFieldWidget(
-                lastnameController, "Last Name", "Last Name", false),
+                emailController, "Email", "Email", false, txtfldHeight),
             Container(
               height: 8,
             ),
-            aTextFieldWidget(emailController, "Email", "Email", false),
-            Container(
-              height: 8,
-            ),
-            aTextFieldWidget(passwordController, "Password", "Password", true),
+            aTextFieldWidget(
+                passwordController, "Password", "Password", true, txtfldHeight),
             Container(
               height: 8,
             ),
             aTextFieldWidget(confirmPasswordController, "Confirm Password",
-                "Confirm password", true),
+                "Confirm password", true, txtfldHeight),
             Container(
               height: 8,
             ),
-            aTextFieldWidget(phoneNoController, "Phone No", "Phone No", false),
+            aTextFieldWidget(
+                phoneNoController, "Phone No", "Phone No", false, txtfldHeight),
 
             //  emailTextFieldWidget(),
             Container(height: 20),
 
             ThemeButton.btnRound("Create Account", _btnCreatePressed),
             Container(
-              height: 20,
+              height: 16,
             ),
             btnSignupWidget(),
             Container(
-              height: 20,
+              height: 16,
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _appIcon() {
-    return Center(
-      child: SizedBox(
-        width: 150,
-        height: 150,
-        child: Image.asset(
-          'assets/images/apple.png',
-          color: Colors.black54,
         ),
       ),
     );
@@ -149,8 +143,9 @@ class _SignupUIState extends State<SignupUI> {
   }
 
   Widget aTextFieldWidget(TextEditingController controller, String name,
-      String placeHolderText, bool isSecured) {
+      String placeHolderText, bool isSecured, double txtFldheight) {
     return Container(
+      height: txtFldheight,
       color: Colors.grey[100],
       margin: EdgeInsets.symmetric(horizontal: 5),
       child: TextField(
