@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jvdream/blocs/auth_bloc.dart';
+import 'package:jvdream/models/user_model.dart';
 import '../common_widgets/common_style.dart';
 
 class LoginUI extends StatefulWidget {
@@ -12,6 +14,7 @@ class LoginUI extends StatefulWidget {
 class _LoginUIState extends State<LoginUI> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  var loginData = Map<String, String>();
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +127,7 @@ class _LoginUIState extends State<LoginUI> {
       child: TextField(
         onChanged: (value) {
           print(value.isValidEmail());
+          loginData["email"] = value;
         },
         controller: emailController,
         decoration: const InputDecoration(
@@ -143,6 +147,10 @@ class _LoginUIState extends State<LoginUI> {
       color: Colors.grey[100],
       margin: EdgeInsets.symmetric(horizontal: 5),
       child: TextField(
+        onChanged: (value) {
+          print(value);
+          loginData["password"] = value;
+        },
         controller: passwordController,
         obscureText: true,
         decoration: const InputDecoration(
@@ -156,7 +164,14 @@ class _LoginUIState extends State<LoginUI> {
     );
   }
 
-  _btnLoginPressed() {
+  _btnLoginPressed() async {
+    if (loginData["email"] != null && loginData["password"] != null) {
+      if ((loginData["email"]!.length > 0) &&
+          loginData["password"]!.length > 0) {
+        await authBloc.doLogin(loginData);
+        //UserModel user = authBloc.userInfo.toList();
+      }
+    }
     print("btn Login Pressed");
   }
 
