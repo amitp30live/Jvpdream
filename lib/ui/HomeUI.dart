@@ -8,7 +8,6 @@ class HomeUI extends StatefulWidget {
   @override
   State<HomeUI> createState() => _HomeUIState();
 }
-// ignore: prefer_const_constructors
 
 class _HomeUIState extends State<HomeUI> {
   int _selectedIndex = 0;

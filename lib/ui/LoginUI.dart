@@ -5,6 +5,7 @@ import 'package:jvdream/models/user_model.dart';
 import 'package:jvdream/ui/HomeUI.dart';
 import 'package:jvdream/ui/SignupUI.dart';
 import '../common_widgets/common_style.dart';
+import '../utils/extension/validation.dart';
 
 class LoginUI extends StatefulWidget {
   const LoginUI({super.key});
@@ -150,7 +151,7 @@ class _LoginUIState extends State<LoginUI> {
       margin: EdgeInsets.symmetric(horizontal: 5),
       child: TextField(
         onChanged: (value) {
-          print(value.isValidEmail());
+          //  print(value.isValidEmail);
           loginData["email"] = value;
         },
         controller: emailController,
@@ -189,18 +190,39 @@ class _LoginUIState extends State<LoginUI> {
   }
 
   _btnLoginPressed() async {
-    if (loginData["email"] != null && loginData["password"] != null) {
-      if ((loginData["email"]!.length > 0) &&
-          loginData["password"]!.length > 0) {
-        setState(() {
-          isApiCallInProgress = true;
-        });
-        await authBloc.doLogin(loginData);
-        //UserModel user = authBloc.userInfo.toList();
-
+    if (loginData["email"] == null) {
+      return createSnackBar('Enter email address');
+    }
+    if (loginData["email"] != null) {
+      String email = loginData["email"]! as String;
+      if (!email.isValidEmail) {
+        return createSnackBar('Enter valid email');
       }
     }
+
+    if (loginData["password"] == null) {
+      return createSnackBar('Enter password');
+    }
+    if (loginData["password"] != null) {
+      String password = loginData["password"]!;
+      if (!password.isValidPassword) {
+        return createSnackBar('Enter valid password');
+      }
+    }
+
+    setState(() {
+      isApiCallInProgress = true;
+    });
+    await authBloc.doLogin(loginData);
+    //UserModel user = authBloc.userInfo.toList();
+
     print("btn Login Pressed");
+  }
+
+  void createSnackBar(String message) {
+    final snackBar =
+        new SnackBar(content: new Text(message), backgroundColor: Colors.red);
+    ScaffoldMessenger.of(contextMain).showSnackBar(snackBar);
   }
 
   _listenBlocData() {
@@ -219,6 +241,7 @@ class _LoginUIState extends State<LoginUI> {
           );
         });
       } else {
+        print("Something went wronnggggg---");
         setState(() {
           isApiCallInProgress = false;
         });
@@ -248,13 +271,5 @@ class _LoginUIState extends State<LoginUI> {
         ],
       ),
     );
-  }
-}
-
-extension EmailValidator on String {
-  bool isValidEmail() {
-    return RegExp(
-            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-        .hasMatch(this);
   }
 }
