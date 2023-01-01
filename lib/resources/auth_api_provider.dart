@@ -13,7 +13,10 @@ class AuthApiProvider {
 
     if (response.statusCode == 200) {
       print(json.decode(response.body));
-      return UserModel.fromJson(json.decode(response.body));
+
+      UserModel amodel = UserModel.fromJson(json.decode(response.body));
+      print(amodel.email);
+      return amodel;
     } else {
       throw Exception('failed to login');
     }

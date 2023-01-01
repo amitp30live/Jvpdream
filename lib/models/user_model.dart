@@ -37,12 +37,14 @@ class UserModel {
       required this.refreshToken,
       required this.accessToken});
 
-  UserModel.fromJson(Map<String, dynamic> parsedJson) {
+  UserModel.fromJson(Map<String, dynamic> userInfo) {
+    var parsedJson = userInfo["UserInfo"];
+
     firstName = parsedJson["firstName"];
     lastName = parsedJson["lastName"];
     email = parsedJson["email"];
-    phoneNo = parsedJson["phoneNo"];
-    sid = parsedJson["_id"];
+    phoneNo = parsedJson["phoneNo"].toString();
+    sid = parsedJson["_id"].toString();
     friendList = parsedJson["friendList"];
     accessToken = parsedJson["accessToken"];
     refreshToken = parsedJson["refreshToken"];

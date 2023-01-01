@@ -8,7 +8,7 @@ class AuthBloc {
   final authRepo = AuthRepository();
 
   final _loginFetcher = PublishSubject<UserModel>();
-  Stream<UserModel> get userInfo => _loginFetcher.stream;
+  Stream<UserModel> get streamUserInfo => _loginFetcher.stream;
 
   doLogin(Map<String, String> loginData) async {
     UserModel userModel = await authRepo.doLogin(loginData);

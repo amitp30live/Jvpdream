@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jvdream/blocs/auth_bloc.dart';
@@ -15,6 +18,28 @@ class _LoginUIState extends State<LoginUI> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   var loginData = Map<String, String>();
+  // late StreamSubscription<UserModel> _loginStreamSubscription;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _listenBlocData();
+  }
+
+  _listenBlocData() {
+    authBloc.streamUserInfo.listen((response) async {
+      print("here--$response");
+
+      log(response.email);
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +106,7 @@ class _LoginUIState extends State<LoginUI> {
     );
   }
 
+/*
   Widget _backIcon(BuildContext context) {
     return IconButton(
         alignment: Alignment.topLeft,
@@ -97,7 +123,7 @@ class _LoginUIState extends State<LoginUI> {
             color: Colors.black //You can set your custom height here
             ));
   }
-
+ */
   Widget _btnForgotPassword(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
