@@ -50,3 +50,12 @@ class UserModel {
     refreshToken = parsedJson["refreshToken"];
   }
 }
+
+class LoginResponse extends Object {
+  late int status;
+  late String message;
+  late UserModel user;
+
+  LoginResponse(
+      {required this.status, required this.message, required this.user});
+}

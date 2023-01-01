@@ -7,12 +7,13 @@ import 'package:rxdart/rxdart.dart';
 class AuthBloc {
   final authRepo = AuthRepository();
 
-  final _loginFetcher = PublishSubject<UserModel>();
-  Stream<UserModel> get streamUserInfo => _loginFetcher.stream;
+  final _loginFetcher = PublishSubject<LoginResponse>();
+  Stream<LoginResponse> get streamUserInfo => _loginFetcher.stream;
 
   doLogin(Map<String, String> loginData) async {
-    UserModel userModel = await authRepo.doLogin(loginData);
-    _loginFetcher.sink.add(userModel);
+    var data = await authRepo.doLogin(loginData);
+
+    return _loginFetcher.sink.add(data);
   }
 }
 

@@ -1,10 +1,9 @@
-import 'dart:async';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:jvdream/blocs/auth_bloc.dart';
 import 'package:jvdream/models/user_model.dart';
+import 'package:jvdream/ui/HomeUI.dart';
+import 'package:jvdream/ui/SignupUI.dart';
 import '../common_widgets/common_style.dart';
 
 class LoginUI extends StatefulWidget {
@@ -13,26 +12,20 @@ class LoginUI extends StatefulWidget {
   @override
   State<LoginUI> createState() => _LoginUIState();
 }
+// ignore: prefer_const_constructors
 
 class _LoginUIState extends State<LoginUI> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   var loginData = Map<String, String>();
   // late StreamSubscription<UserModel> _loginStreamSubscription;
-
+  var isApiCallInProgress = false;
+  late BuildContext contextMain;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _listenBlocData();
-  }
-
-  _listenBlocData() {
-    authBloc.streamUserInfo.listen((response) async {
-      print("here--$response");
-
-      log(response.email);
-    });
   }
 
   @override
@@ -45,11 +38,11 @@ class _LoginUIState extends State<LoginUI> {
   Widget build(BuildContext context) {
     double scrnWidth = MediaQuery.of(context).size.width;
     double scrnHeight = MediaQuery.of(context).size.height;
-
+    contextMain = context;
     return Scaffold(
       appBar: AppBar(
         // toolbarHeight: 0,
-        title: Text(
+        title: const Text(
           "LOGIN",
           //  style: TextStyle(""),
         ),
@@ -61,48 +54,53 @@ class _LoginUIState extends State<LoginUI> {
       // ),
       // backgroundColor: Colors.white,
       ,
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(25),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //  topLogo(),
-            // Container(
-            //   height: 30,
-            // ),
-            // _backIcon(context),
-            // Container(
-            //   height: 10,
-            // ),
-            CommonWidgets.appIcon(scrnWidth * 0.35),
-            Container(
-              height: 30,
-            ),
-            // _textLogin(),
-            // Container(
-            //   height: 30,
-            // ),
-            emailTextFieldWidget(),
-            Container(height: 20),
-            passwordTextFieldWidget(),
+      body: isApiCallInProgress
+          ? Center(
+              child: CircularProgressIndicator(
+                  backgroundColor: Theme.of(context).primaryColor),
+            )
+          : SingleChildScrollView(
+              padding: EdgeInsets.all(25),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //  topLogo(),
+                  // Container(
+                  //   height: 30,
+                  // ),
+                  // _backIcon(context),
+                  // Container(
+                  //   height: 10,
+                  // ),
+                  CommonWidgets.appIcon(scrnWidth * 0.35),
+                  Container(
+                    height: 30,
+                  ),
+                  // _textLogin(),
+                  // Container(
+                  //   height: 30,
+                  // ),
+                  emailTextFieldWidget(),
+                  Container(height: 20),
+                  passwordTextFieldWidget(),
 
-            Container(height: 20),
-            _btnForgotPassword(context),
-            Container(
-              height: 40,
+                  Container(height: 20),
+                  _btnForgotPassword(context),
+                  Container(
+                    height: 40,
+                  ),
+                  ThemeButton.btnRound("LOGIN", _btnLoginPressed),
+                  Container(
+                    height: 40,
+                  ),
+                  btnSignupWidget(),
+                  Container(
+                    height: 50,
+                  ),
+                ],
+              ),
             ),
-            ThemeButton.btnRound("LOGIN", _btnLoginPressed),
-            Container(
-              height: 40,
-            ),
-            btnSignupWidget(),
-            Container(
-              height: 50,
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -194,11 +192,38 @@ class _LoginUIState extends State<LoginUI> {
     if (loginData["email"] != null && loginData["password"] != null) {
       if ((loginData["email"]!.length > 0) &&
           loginData["password"]!.length > 0) {
+        setState(() {
+          isApiCallInProgress = true;
+        });
         await authBloc.doLogin(loginData);
         //UserModel user = authBloc.userInfo.toList();
+
       }
     }
     print("btn Login Pressed");
+  }
+
+  _listenBlocData() {
+    authBloc.streamUserInfo.listen((response) async {
+      log(response.user.email);
+
+      if (response.status == 200) {
+        setState(() {
+          isApiCallInProgress = false;
+
+          Navigator.push(
+            contextMain,
+            MaterialPageRoute(builder: (context) {
+              return HomeUI();
+            }),
+          );
+        });
+      } else {
+        setState(() {
+          isApiCallInProgress = false;
+        });
+      }
+    });
   }
 
   _btnFogotoPasswordPressed() {
