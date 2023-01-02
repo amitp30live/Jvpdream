@@ -1,4 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:jvdream/blocs/auth_bloc.dart';
+import 'package:jvdream/ui/HomeUI.dart';
 import '../common_widgets/common_style.dart';
 import '../ui/LoginUI.dart';
 
@@ -16,13 +20,23 @@ class _SignupUIState extends State<SignupUI> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final phoneNoController = TextEditingController();
+  var isApiCallInProgress = false;
+  late BuildContext contextMain;
+
   var signupData = Map<String, String>();
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _listenBlocData();
+  }
+
   Widget build(BuildContext context) {
     double scrnWidth = MediaQuery.of(context).size.width;
     double scrnHeight = MediaQuery.of(context).size.height;
     double txtfldHeight = scrnWidth * .15;
     var inputData = Map<String, String>();
+    contextMain = context;
 
     return Scaffold(
       appBar: AppBar(
@@ -33,61 +47,70 @@ class _SignupUIState extends State<SignupUI> {
         ),
         backgroundColor: Colors.black87,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //  topLogo(),
+      body: isApiCallInProgress
+          ? Center(
+              child: CircularProgressIndicator(
+                  backgroundColor: Theme.of(context).primaryColor),
+            )
+          : SingleChildScrollView(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //  topLogo(),
 
-            CommonWidgets.appIcon(scrnWidth * 0.35),
-            Container(
-              height: 10,
-            ),
+                  CommonWidgets.appIcon(scrnWidth * 0.35),
+                  Container(
+                    height: 10,
+                  ),
 
-            aTextFieldWidget(firstnameController, "First Name", "First Name",
-                false, txtfldHeight),
-            Container(
-              height: 8,
-            ),
-            aTextFieldWidget(lastnameController, "Last Name", "Last Name",
-                false, txtfldHeight),
-            Container(
-              height: 8,
-            ),
-            aTextFieldWidget(
-                emailController, "Email", "Email", false, txtfldHeight),
-            Container(
-              height: 8,
-            ),
-            aTextFieldWidget(
-                passwordController, "Password", "Password", true, txtfldHeight),
-            Container(
-              height: 8,
-            ),
-            aTextFieldWidget(confirmPasswordController, "Confirm Password",
-                "Confirm password", true, txtfldHeight),
-            Container(
-              height: 8,
-            ),
-            aTextFieldWidget(
-                phoneNoController, "Phone No", "Phone No", false, txtfldHeight),
+                  aTextFieldWidget(firstnameController, "First Name",
+                      "First Name", false, txtfldHeight),
+                  Container(
+                    height: 8,
+                  ),
+                  aTextFieldWidget(lastnameController, "Last Name", "Last Name",
+                      false, txtfldHeight),
+                  Container(
+                    height: 8,
+                  ),
+                  aTextFieldWidget(
+                      emailController, "Email", "Email", false, txtfldHeight),
+                  Container(
+                    height: 8,
+                  ),
+                  aTextFieldWidget(passwordController, "Password", "Password",
+                      true, txtfldHeight),
+                  Container(
+                    height: 8,
+                  ),
+                  aTextFieldWidget(
+                      confirmPasswordController,
+                      "Confirm Password",
+                      "Confirm password",
+                      true,
+                      txtfldHeight),
+                  Container(
+                    height: 8,
+                  ),
+                  aTextFieldWidget(phoneNoController, "Phone No", "Phone No",
+                      false, txtfldHeight),
 
-            //  emailTextFieldWidget(),
-            Container(height: 20),
+                  //  emailTextFieldWidget(),
+                  Container(height: 20),
 
-            ThemeButton.btnRound("Create Account", _btnCreatePressed),
-            Container(
-              height: 16,
+                  ThemeButton.btnRound("Create Account", _btnCreatePressed),
+                  Container(
+                    height: 16,
+                  ),
+                  btnSignupWidget(),
+                  Container(
+                    height: 16,
+                  ),
+                ],
+              ),
             ),
-            btnSignupWidget(),
-            Container(
-              height: 16,
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -167,12 +190,20 @@ password2:amit@1234
       signupData["password"] = value;
     } else if (controller == phoneNoController) {
       signupData["phoneNo"] = value;
+    } else if (controller == confirmPasswordController) {
+      signupData["password2"] = value;
     }
     print(signupData);
   }
 
   _btnCreatePressed() {
+    for (var z in signupData.keys) {}
     print("btn Create Pressed");
+
+    setState(() {
+      isApiCallInProgress = true;
+    });
+    authBloc.doSignup(signupData);
   }
 
   Widget btnSignupWidget() {
@@ -193,5 +224,34 @@ password2:amit@1234
         ],
       ),
     );
+  }
+
+  _listenBlocData() {
+    authBloc.streamUserInfo.listen((response) async {
+      emailController.clear();
+      passwordController.clear();
+      firstnameController.clear();
+      lastnameController.clear();
+      confirmPasswordController.clear();
+
+      phoneNoController.clear();
+      if (response.status == 200) {
+        setState(() {
+          isApiCallInProgress = false;
+
+          Navigator.push(
+            contextMain,
+            MaterialPageRoute(builder: (context) {
+              return HomeUI();
+            }),
+          );
+        });
+      } else {
+        print("Something went wronnggggg---");
+        setState(() {
+          isApiCallInProgress = false;
+        });
+      }
+    });
   }
 }

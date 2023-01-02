@@ -19,7 +19,6 @@ class _LoginUIState extends State<LoginUI> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   var loginData = Map<String, String>();
-  // late StreamSubscription<UserModel> _loginStreamSubscription;
   var isApiCallInProgress = false;
   late BuildContext contextMain;
   @override
@@ -48,13 +47,7 @@ class _LoginUIState extends State<LoginUI> {
           //  style: TextStyle(""),
         ),
         backgroundColor: Colors.black87,
-      )
-      // title: Text(
-      //   "Login",
-      //   style: TextStyle(color: Colors.black),
-      // ),
-      // backgroundColor: Colors.white,
-      ,
+      ),
       body: isApiCallInProgress
           ? Center(
               child: CircularProgressIndicator(
@@ -66,26 +59,13 @@ class _LoginUIState extends State<LoginUI> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //  topLogo(),
-                  // Container(
-                  //   height: 30,
-                  // ),
-                  // _backIcon(context),
-                  // Container(
-                  //   height: 10,
-                  // ),
                   CommonWidgets.appIcon(scrnWidth * 0.35),
                   Container(
                     height: 30,
                   ),
-                  // _textLogin(),
-                  // Container(
-                  //   height: 30,
-                  // ),
                   emailTextFieldWidget(),
                   Container(height: 20),
                   passwordTextFieldWidget(),
-
                   Container(height: 20),
                   _btnForgotPassword(context),
                   Container(
@@ -105,24 +85,6 @@ class _LoginUIState extends State<LoginUI> {
     );
   }
 
-/*
-  Widget _backIcon(BuildContext context) {
-    return IconButton(
-        alignment: Alignment.topLeft,
-        icon: Icon(Icons.arrow_back, color: Colors.black),
-        onPressed: () => Navigator.of(context).pop());
-  }
-
-  Widget _textLogin() {
-    return const Text("LOGIN",
-        style: TextStyle(
-            fontSize: 36.0,
-            fontWeight: FontWeight.bold,
-            height: 1.3,
-            color: Colors.black //You can set your custom height here
-            ));
-  }
- */
   Widget _btnForgotPassword(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -151,7 +113,6 @@ class _LoginUIState extends State<LoginUI> {
       margin: EdgeInsets.symmetric(horizontal: 5),
       child: TextField(
         onChanged: (value) {
-          //  print(value.isValidEmail);
           loginData["email"] = value;
         },
         controller: emailController,
@@ -170,10 +131,9 @@ class _LoginUIState extends State<LoginUI> {
   Widget passwordTextFieldWidget() {
     return Container(
       color: Colors.grey[100],
-      margin: EdgeInsets.symmetric(horizontal: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 5),
       child: TextField(
         onChanged: (value) {
-          print(value);
           loginData["password"] = value;
         },
         controller: passwordController,
@@ -194,7 +154,7 @@ class _LoginUIState extends State<LoginUI> {
       return createSnackBar('Enter email address');
     }
     if (loginData["email"] != null) {
-      String email = loginData["email"]! as String;
+      String email = loginData["email"]!;
       if (!email.isValidEmail) {
         return createSnackBar('Enter valid email');
       }
@@ -205,30 +165,29 @@ class _LoginUIState extends State<LoginUI> {
     }
     if (loginData["password"] != null) {
       String password = loginData["password"]!;
-      if (!password.isValidPassword) {
-        return createSnackBar('Enter valid password');
+      if (password.length < 5) {
+        return createSnackBar('Enter valid password more than 5 characters');
       }
     }
 
     setState(() {
       isApiCallInProgress = true;
     });
-    await authBloc.doLogin(loginData);
-    //UserModel user = authBloc.userInfo.toList();
-
-    print("btn Login Pressed");
+    authBloc.doLogin(loginData);
   }
 
   void createSnackBar(String message) {
     final snackBar =
-        new SnackBar(content: new Text(message), backgroundColor: Colors.red);
+        SnackBar(content: Text(message), backgroundColor: Colors.red[200]);
     ScaffoldMessenger.of(contextMain).showSnackBar(snackBar);
   }
 
+//mark: Listen
   _listenBlocData() {
     authBloc.streamUserInfo.listen((response) async {
       log(response.user.email);
-
+      emailController.clear();
+      passwordController.clear();
       if (response.status == 200) {
         setState(() {
           isApiCallInProgress = false;
@@ -249,27 +208,22 @@ class _LoginUIState extends State<LoginUI> {
     });
   }
 
-  _btnFogotoPasswordPressed() {
-    print("btn forgot password Pressed");
-  }
-
   Widget btnSignupWidget() {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("Don't have an account?"),
-          TextButton(
-            child: Text('Get Started Now'),
-            style: ElevatedButton.styleFrom(
-              onPrimary: Colors.black, // foreground
-            ),
-            onPressed: () {
-              //  Navigator.push(context, MaterialPageRoute(builder: (context) => ));
-            },
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("Don't have an account?"),
+        TextButton(
+          child: Text('Get Started Now'),
+          style: ElevatedButton.styleFrom(
+            onPrimary: Colors.black, // foreground
           ),
-        ],
-      ),
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => SignupUI()));
+          },
+        ),
+      ],
     );
   }
 }

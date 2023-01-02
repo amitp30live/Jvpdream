@@ -15,6 +15,12 @@ class AuthBloc {
 
     return _loginFetcher.sink.add(data);
   }
+
+  doSignup(Map<String, String> signupData) async {
+    var data = await authRepo.doSignup(signupData);
+
+    return _loginFetcher.sink.add(data);
+  }
 }
 
 final authBloc = AuthBloc();

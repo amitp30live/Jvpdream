@@ -49,6 +49,18 @@ class UserModel {
     accessToken = parsedJson["accessToken"];
     refreshToken = parsedJson["refreshToken"];
   }
+
+  UserModel.dummy() {
+    UserModel user = UserModel(
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNo: "",
+        sid: "",
+        friendList: [],
+        refreshToken: "",
+        accessToken: "");
+  }
 }
 
 class LoginResponse extends Object {

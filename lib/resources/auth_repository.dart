@@ -7,4 +7,8 @@ class AuthRepository {
   Future<LoginResponse> doLogin(Map<String, String> loginData) async {
     return authApiProvider.doLoginFetchUserData(loginData);
   }
+
+  Future<LoginResponse> doSignup(Map<String, String> signupData) async {
+    return authApiProvider.doSingupFetchUserData(signupData);
+  }
 }
