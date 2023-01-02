@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jvdream/ui/InitialUI.dart';
+import 'package:jvdream/ui/LoginUI.dart';
 
 void main() {
   runApp(const RootApp());
@@ -10,7 +11,10 @@ class RootApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(themeMode: ThemeMode.dark, home: InitialUI());
+    return MaterialApp(
+      themeMode: ThemeMode.dark,
+      home: InitialUI(),
+    );
   }
 }
 

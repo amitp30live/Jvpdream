@@ -1,4 +1,5 @@
 import 'dart:developer';
+import '../utils/extension/validation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:jvdream/blocs/auth_bloc.dart';
@@ -104,7 +105,7 @@ class _SignupUIState extends State<SignupUI> {
                   Container(
                     height: 16,
                   ),
-                  btnSignupWidget(),
+                  alreadyHaveAccountWidget(),
                   Container(
                     height: 16,
                   ),
@@ -197,36 +198,57 @@ password2:amit@1234
   }
 
   _btnCreatePressed() {
-    for (var z in signupData.keys) {}
     print("btn Create Pressed");
 
-    setState(() {
-      isApiCallInProgress = true;
-    });
-    authBloc.doSignup(signupData);
+    var showSnacbarText = "";
+    for (var z in signupData.keys) {
+      final SignupEnum nameEnum =
+          SignupEnum.values.byName(z); // SampleEnum.second
+      showSnacbarText = getValidationError(nameEnum);
+      print(showSnacbarText);
+    }
+
+    if (showSnacbarText.isNotEmpty) {
+      createSnackBar(showSnacbarText);
+    } else {
+      setState(() {
+        isApiCallInProgress = true;
+      });
+      authBloc.doSignup(signupData);
+    }
   }
 
-  Widget btnSignupWidget() {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("Already have an account.!"),
-          TextButton(
-            child: Text('Login'),
-            style: ElevatedButton.styleFrom(
-              onPrimary: Colors.black, // foreground
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+  Widget alreadyHaveAccountWidget() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("Already have an account.!"),
+        TextButton(
+          child: Text('Login'),
+          style: ElevatedButton.styleFrom(
+            onPrimary: Colors.black, // foreground
           ),
-        ],
-      ),
+          onPressed: () {
+            Navigator.push(
+              contextMain,
+              MaterialPageRoute(builder: (context) {
+                return LoginUI();
+              }),
+            );
+          },
+        ),
+      ],
     );
   }
 
   _listenBlocData() {
+    signupData["firstName"] = "";
+    signupData["lastName"] = "";
+    signupData["email"] = "";
+    signupData["password"] = "";
+    signupData["phoneNo"] = "";
+    signupData["password2"] = "";
+
     authBloc.streamUserInfo.listen((response) async {
       emailController.clear();
       passwordController.clear();
@@ -253,5 +275,77 @@ password2:amit@1234
         });
       }
     });
+  }
+
+  void createSnackBar(String message) {
+    final snackBar =
+        SnackBar(content: Text(message), backgroundColor: Colors.red[200]);
+    ScaffoldMessenger.of(contextMain).showSnackBar(snackBar);
+  }
+
+  String getValidationError(SignupEnum n) {
+    switch (n) {
+      case SignupEnum.email:
+        if (signupData["email"] == null) {
+          return 'Please enter email address';
+        }
+        if (signupData["email"] != null) {
+          String email = signupData["email"]!;
+          if (!email.isValidEmail) {
+            return 'Please enter valid email';
+          }
+        }
+        return "";
+      case SignupEnum.firstName:
+        if (signupData["firstName"] == null) {
+          return 'Please enter first name';
+        }
+        return "";
+      case SignupEnum.lastName:
+        if (signupData["lastName"] == null) {
+          return 'Please enter last name';
+        }
+        return "";
+      case SignupEnum.phoneNo:
+        if (signupData["phoneNo"] == null) {
+          return 'Please enter phone number ';
+        }
+        if (signupData["phoneNo"] != null) {
+          String phoenNo = signupData["phoneNo"]!;
+          if (!phoenNo.isValidPhone) {
+            return 'Enter valid phone number';
+          }
+        }
+        return "";
+      case SignupEnum.password:
+        if (signupData["password"] == null) {
+          return 'Please enter password';
+        }
+        if (signupData["password"] != null) {
+          String password = signupData["password"]!;
+          if (password.length < 6) {
+            return 'Please enter more than 5 characters for password';
+          }
+        }
+        return "";
+      case SignupEnum.password2:
+        if (signupData["password2"] == null) {
+          return 'Please enter confirm password';
+        }
+        if (signupData["password2"] != null) {
+          String password = signupData["password2"]!;
+          if (password.length < 6) {
+            return 'Please enter more than 5 characters for confirm password';
+          }
+        }
+        if (signupData["password"] != signupData["password2"]) {
+          return 'Password and confirm password not matched';
+        }
+        return "";
+      default:
+        {
+          return "";
+        }
+    }
   }
 }
