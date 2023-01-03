@@ -37,6 +37,7 @@ class AuthApiProvider {
       UserModel amodel = UserModel.fromJson(json.decode(response.body));
       LoginResponse loginResp = LoginResponse(
           message: "User retrieved", status: response.statusCode, user: amodel);
+
       return loginResp;
     } else {
       return LoginResponse(

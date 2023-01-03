@@ -1,11 +1,29 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class CommonStyle {
   static TextStyle getTextStyle() {
     return const TextStyle(
         color: Colors.white, backgroundColor: Colors.black45, fontSize: 17);
+  }
+}
+
+class SnackbarClass {
+  static createSnackBar(String message, BuildContext context) {
+    // final snackBar =
+    //     SnackBar(content: Text(message), backgroundColor: Colors.red[200]);
+    // ScaffoldMessenger.of(contextMain).showSnackBar(snackBar);
+
+    final snackBar = SnackBar(
+      content: Text(
+        message,
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
+      ),
+      duration: const Duration(seconds: 2),
+      backgroundColor: Colors.red,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
 

@@ -151,22 +151,25 @@ class _LoginUIState extends State<LoginUI> {
 
   _btnLoginPressed() async {
     if (loginData["email"] == null) {
-      return createSnackBar('Enter email address');
+      return SnackbarClass.createSnackBar(
+          'Please enter email address', contextMain);
     }
     if (loginData["email"] != null) {
       String email = loginData["email"]!;
       if (!email.isValidEmail) {
-        return createSnackBar('Enter valid email');
+        return SnackbarClass.createSnackBar(
+            'Please enter valid email', contextMain);
       }
     }
 
     if (loginData["password"] == null) {
-      return createSnackBar('Enter password');
+      return SnackbarClass.createSnackBar('Enter password', contextMain);
     }
     if (loginData["password"] != null) {
       String password = loginData["password"]!;
       if (password.length < 5) {
-        return createSnackBar('Enter valid password more than 5 characters');
+        return SnackbarClass.createSnackBar(
+            'Enter valid password more than 5 characters', contextMain);
       }
     }
 
@@ -176,21 +179,20 @@ class _LoginUIState extends State<LoginUI> {
     authBloc.doLogin(loginData);
   }
 
-  void createSnackBar(String message) {
-    final snackBar =
-        SnackBar(content: Text(message), backgroundColor: Colors.red[200]);
-    ScaffoldMessenger.of(contextMain).showSnackBar(snackBar);
-  }
-
 //mark: Listen
   _listenBlocData() {
     authBloc.streamUserInfo.listen((response) async {
-      log(response.user.email);
-      emailController.clear();
-      passwordController.clear();
+      // emailController.clear();
+      // passwordController.clear();
       if (response.status == 200) {
         setState(() {
           isApiCallInProgress = false;
+
+          // var data =
+          //          StoreUserInPreference.storeUser(response.user.toString());
+          //     print(data);
+          //     var userdetails = await StoreUserInPreference.fetchUser();
+          //     print(userdetails);
 
           Navigator.push(
             contextMain,
@@ -201,6 +203,7 @@ class _LoginUIState extends State<LoginUI> {
         });
       } else {
         print("Something went wronnggggg---");
+        SnackbarClass.createSnackBar(response.message, contextMain);
         setState(() {
           isApiCallInProgress = false;
         });

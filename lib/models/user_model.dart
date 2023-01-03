@@ -1,3 +1,8 @@
+import 'dart:developer';
+
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+
 class UserModel {
   /*
   {
@@ -37,7 +42,7 @@ class UserModel {
       required this.refreshToken,
       required this.accessToken});
 
-  UserModel.fromJson(Map<String, dynamic> userInfo) {
+  UserModel.fromJson(Map<dynamic, dynamic> userInfo) {
     var parsedJson = userInfo["UserInfo"];
 
     firstName = parsedJson["firstName"];
@@ -70,4 +75,26 @@ class LoginResponse extends Object {
 
   LoginResponse(
       {required this.status, required this.message, required this.user});
+}
+
+class StoreUserInPreference {
+  static storeUser(Map<String, dynamic> parsedJson) async {
+    SharedPreferences shared_User = await SharedPreferences.getInstance();
+    Map decode_options = jsonDecode(parsedJson.toString());
+    String user = jsonEncode(UserModel.fromJson(decode_options));
+    shared_User.setString('user', user);
+    log("usererrrrr -- $user");
+    return user;
+  }
+
+  static fetchUser() async {
+    SharedPreferences shared_User = await SharedPreferences.getInstance();
+    if (shared_User.getString('user') != null) {
+      Map userMap = jsonDecode(shared_User.getString('user')!);
+      var user = UserModel.fromJson(userMap);
+      print("HERE WE GOOOOO----");
+      print(user.email);
+      return user;
+    }
+  }
 }

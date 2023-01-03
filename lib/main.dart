@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:jvdream/ui/InitialUI.dart';
-import 'package:jvdream/ui/LoginUI.dart';
 
 void main() {
   runApp(const RootApp());

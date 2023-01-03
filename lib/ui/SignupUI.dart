@@ -206,16 +206,16 @@ password2:amit@1234
           SignupEnum.values.byName(z); // SampleEnum.second
       showSnacbarText = getValidationError(nameEnum);
       print(showSnacbarText);
+      if (showSnacbarText.isNotEmpty) {
+        SnackbarClass.createSnackBar(showSnacbarText, contextMain);
+        return;
+      }
     }
 
-    if (showSnacbarText.isNotEmpty) {
-      createSnackBar(showSnacbarText);
-    } else {
-      setState(() {
-        isApiCallInProgress = true;
-      });
-      authBloc.doSignup(signupData);
-    }
+    setState(() {
+      isApiCallInProgress = true;
+    });
+    authBloc.doSignup(signupData);
   }
 
   Widget alreadyHaveAccountWidget() {
@@ -277,75 +277,85 @@ password2:amit@1234
     });
   }
 
-  void createSnackBar(String message) {
-    final snackBar =
-        SnackBar(content: Text(message), backgroundColor: Colors.red[200]);
-    ScaffoldMessenger.of(contextMain).showSnackBar(snackBar);
-  }
-
   String getValidationError(SignupEnum n) {
+    var msg = "";
     switch (n) {
       case SignupEnum.email:
-        if (signupData["email"] == null) {
-          return 'Please enter email address';
+        if (signupData["email"]!.isEmpty) {
+          msg = 'Please enter email address';
+          break;
         }
         if (signupData["email"] != null) {
           String email = signupData["email"]!;
           if (!email.isValidEmail) {
-            return 'Please enter valid email';
+            msg = 'Please enter valid email';
+            break;
           }
         }
-        return "";
+        break;
+
       case SignupEnum.firstName:
-        if (signupData["firstName"] == null) {
-          return 'Please enter first name';
+        if (signupData["firstName"]!.isEmpty) {
+          msg = 'Please enter first name';
+          break;
         }
-        return "";
+        break;
+
       case SignupEnum.lastName:
         if (signupData["lastName"] == null) {
-          return 'Please enter last name';
+          msg = 'Please enter last name';
+          break;
         }
-        return "";
+        break;
+
       case SignupEnum.phoneNo:
-        if (signupData["phoneNo"] == null) {
-          return 'Please enter phone number ';
+        if (signupData["phoneNo"]!.isEmpty) {
+          msg = 'Please enter phone number ';
+          break;
         }
         if (signupData["phoneNo"] != null) {
           String phoenNo = signupData["phoneNo"]!;
-          if (!phoenNo.isValidPhone) {
-            return 'Enter valid phone number';
+          if (phoenNo.length > 8) {
+            msg = 'Enter valid phone number';
+            break;
           }
         }
-        return "";
+        break;
       case SignupEnum.password:
-        if (signupData["password"] == null) {
-          return 'Please enter password';
+        if (signupData["password"]!.isEmpty) {
+          msg = 'Please enter password';
+          break;
         }
         if (signupData["password"] != null) {
           String password = signupData["password"]!;
           if (password.length < 6) {
-            return 'Please enter more than 5 characters for password';
+            msg = 'Please enter more than 5 characters for password';
+            break;
           }
         }
-        return "";
+        break;
       case SignupEnum.password2:
-        if (signupData["password2"] == null) {
-          return 'Please enter confirm password';
+        if (signupData["password2"]!.isEmpty) {
+          msg = 'Please enter confirm password';
+          break;
         }
         if (signupData["password2"] != null) {
           String password = signupData["password2"]!;
           if (password.length < 6) {
-            return 'Please enter more than 5 characters for confirm password';
+            msg = 'Please enter more than 5 characters for confirm password';
+            break;
           }
         }
+
         if (signupData["password"] != signupData["password2"]) {
-          return 'Password and confirm password not matched';
+          msg = 'Password and confirm password not matched';
         }
-        return "";
+        break;
       default:
         {
-          return "";
+          break;
         }
     }
+    return msg;
   }
 }
