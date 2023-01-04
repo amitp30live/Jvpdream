@@ -130,7 +130,8 @@ class _LoginUIState extends State<LoginUI> with ValidationMixin {
           //border: OutlineInputBorder(),
           labelText: 'Email',
         ),
-        validator: (value) {
+        validator: validateEmail
+        /*(value) {
           if (value!.isEmpty) {
             return 'Please enter a valid email address';
           }
@@ -138,7 +139,8 @@ class _LoginUIState extends State<LoginUI> with ValidationMixin {
             return 'Email is invalid, must contain @';
           }
           return null;
-        },
+        }*/
+        ,
       ),
     );
   }
@@ -160,7 +162,9 @@ class _LoginUIState extends State<LoginUI> with ValidationMixin {
           // border: OutlineInputBorder(),
           labelText: 'Password',
         ),
-        validator: (value) {
+        validator: validatePassword
+
+        /*(value) {
           if (value!.isEmpty) {
             return 'Please enter a password';
           }
@@ -168,7 +172,8 @@ class _LoginUIState extends State<LoginUI> with ValidationMixin {
             return 'Password is invalid, must contain 6 characters';
           }
           return null;
-        },
+        }*/
+        ,
       ),
     );
   }
