@@ -1,8 +1,0 @@
-version: "Apple Swift version 5.5.1 (swiftlang-1300.0.31.4 clang-1300.0.29.6)"
-options: "9a1a92567da5ba281853eeb8aa848932366c22d4c906cd6a3183548b7eafb970"
-build_start_time: [1672246026, 224677085]
-build_end_time: [1672246038, 662291049]
-inputs:
-  "/Users/amitprajapati/Documents/Flutter_IT/JVDream/macos/Flutter/GeneratedPluginRegistrant.swift": [1672246011, 339326381]
-  "/Users/amitprajapati/Documents/Flutter_IT/JVDream/macos/Runner/AppDelegate.swift": [1671141040, 0]
-  "/Users/amitprajapati/Documents/Flutter_IT/JVDream/macos/Runner/MainFlutterWindow.swift": [1671141040, 0]
