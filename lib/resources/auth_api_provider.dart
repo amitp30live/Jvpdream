@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:http/http.dart';
 import 'package:jvdream/resources/api_urls.dart';
 import 'package:jvdream/models/user_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthApiProvider {
   Client client = Client();
@@ -14,13 +16,22 @@ class AuthApiProvider {
     print(json.decode(response.body));
 
     if (response.statusCode == 200) {
+      SharedPreferences shared_User = await SharedPreferences.getInstance();
+      Map decode_options = jsonDecode(response.body.toString());
+      print("decode_options----$decode_options");
+
+      String user = jsonEncode(decode_options);
+
+      shared_User.setString('user', user);
+      print("USERRERRERE----$user");
+
       UserModel amodel = UserModel.fromJson(json.decode(response.body));
       LoginResponse loginResp = LoginResponse(
           message: "User retrieved", status: response.statusCode, user: amodel);
       return loginResp;
     } else {
       return LoginResponse(
-          message: "OPSss.. Failed..",
+          message: json.decode(response.body)["message"],
           status: response.statusCode,
           user: UserModel.dummy());
     }
@@ -41,7 +52,7 @@ class AuthApiProvider {
       return loginResp;
     } else {
       return LoginResponse(
-          message: "OPSss.. Failed..",
+          message: json.decode(response.body)["message"],
           status: response.statusCode,
           user: UserModel.dummy());
       // throw Exception('failed to login');

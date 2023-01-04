@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:jvdream/ui/InitialUI.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeUI extends StatefulWidget {
   const HomeUI({super.key});
@@ -40,9 +42,31 @@ class _HomeUIState extends State<HomeUI> {
         onTap: _onItemTapped,
       ),
       body: Center(
-        child: Text("HOME"),
+        child: Column(
+          children: [
+            Container(
+              height: 200,
+            ),
+            Text("HOME"),
+            TextButton(
+                onPressed: () {
+                  _doOpenPage(context);
+                },
+                child: Text("Logout"))
+          ],
+        ),
       ),
     );
+  }
+
+  void _doOpenPage(BuildContext contextMain) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.remove('user');
+
+    Navigator.pushAndRemoveUntil(contextMain,
+        MaterialPageRoute(builder: (context) {
+      return InitialUI();
+    }), ModalRoute.withName('/'));
   }
 
   void _onItemTapped(int index) {

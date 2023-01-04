@@ -21,7 +21,7 @@ class SnackbarClass {
         style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
       ),
       duration: const Duration(seconds: 2),
-      backgroundColor: Colors.red,
+      // backgroundColor: Colors.red,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }

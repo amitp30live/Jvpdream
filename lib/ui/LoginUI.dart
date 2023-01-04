@@ -15,12 +15,15 @@ class LoginUI extends StatefulWidget {
 }
 // ignore: prefer_const_constructors
 
-class _LoginUIState extends State<LoginUI> {
+class _LoginUIState extends State<LoginUI> with ValidationMixin {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   var loginData = Map<String, String>();
   var isApiCallInProgress = false;
   late BuildContext contextMain;
+
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -37,7 +40,7 @@ class _LoginUIState extends State<LoginUI> {
   @override
   Widget build(BuildContext context) {
     double scrnWidth = MediaQuery.of(context).size.width;
-    double scrnHeight = MediaQuery.of(context).size.height;
+    //double scrnHeight = MediaQuery.of(context).size.height;
     contextMain = context;
     return Scaffold(
       appBar: AppBar(
@@ -54,32 +57,35 @@ class _LoginUIState extends State<LoginUI> {
                   backgroundColor: Theme.of(context).primaryColor),
             )
           : SingleChildScrollView(
-              padding: EdgeInsets.all(25),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CommonWidgets.appIcon(scrnWidth * 0.35),
-                  Container(
-                    height: 30,
-                  ),
-                  emailTextFieldWidget(),
-                  Container(height: 20),
-                  passwordTextFieldWidget(),
-                  Container(height: 20),
-                  _btnForgotPassword(context),
-                  Container(
-                    height: 40,
-                  ),
-                  ThemeButton.btnRound("LOGIN", _btnLoginPressed),
-                  Container(
-                    height: 40,
-                  ),
-                  btnSignupWidget(),
-                  Container(
-                    height: 50,
-                  ),
-                ],
+              padding: const EdgeInsets.all(25),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CommonWidgets.appIcon(scrnWidth * 0.35),
+                    Container(
+                      height: 30,
+                    ),
+                    emailTextFieldWidget(),
+                    Container(height: 20),
+                    passwordTextFieldWidget(),
+                    Container(height: 20),
+                    _btnForgotPassword(context),
+                    Container(
+                      height: 40,
+                    ),
+                    ThemeButton.btnRound("LOGIN", _btnLoginPressed),
+                    Container(
+                      height: 40,
+                    ),
+                    btnSignupWidget(),
+                    Container(
+                      height: 50,
+                    ),
+                  ],
+                ),
               ),
             ),
     );
@@ -111,7 +117,7 @@ class _LoginUIState extends State<LoginUI> {
     return Container(
       color: Colors.grey[100],
       margin: EdgeInsets.symmetric(horizontal: 5),
-      child: TextField(
+      child: TextFormField(
         onChanged: (value) {
           loginData["email"] = value;
         },
@@ -124,6 +130,15 @@ class _LoginUIState extends State<LoginUI> {
           //border: OutlineInputBorder(),
           labelText: 'Email',
         ),
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'Please enter a valid email address';
+          }
+          if (!value.contains('@')) {
+            return 'Email is invalid, must contain @';
+          }
+          return null;
+        },
       ),
     );
   }
@@ -132,7 +147,7 @@ class _LoginUIState extends State<LoginUI> {
     return Container(
       color: Colors.grey[100],
       margin: const EdgeInsets.symmetric(horizontal: 5),
-      child: TextField(
+      child: TextFormField(
         onChanged: (value) {
           loginData["password"] = value;
         },
@@ -145,12 +160,21 @@ class _LoginUIState extends State<LoginUI> {
           // border: OutlineInputBorder(),
           labelText: 'Password',
         ),
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'Please enter a password';
+          }
+          if (value.length < 5) {
+            return 'Password is invalid, must contain 6 characters';
+          }
+          return null;
+        },
       ),
     );
   }
 
   _btnLoginPressed() async {
-    if (loginData["email"] == null) {
+    /*  if (loginData["email"] == null) {
       return SnackbarClass.createSnackBar(
           'Please enter email address', contextMain);
     }
@@ -172,34 +196,46 @@ class _LoginUIState extends State<LoginUI> {
             'Enter valid password more than 5 characters', contextMain);
       }
     }
+    */
+    if (_formKey.currentState != null) {
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
+        if (mounted) {
+          setState(() {
+            isApiCallInProgress = true;
+          });
+          authBloc.doLogin(loginData);
+        }
+      }
+    }
+  }
 
-    setState(() {
-      isApiCallInProgress = true;
-    });
-    authBloc.doLogin(loginData);
+  Map<String, dynamic> modelFromObject(UserModel userthis) {
+    var parsedJson = Map<String, dynamic>();
+    parsedJson["firstName"] = userthis.firstName;
+    parsedJson["lastName"] = userthis.lastName;
+    parsedJson["email"] = userthis.email;
+    parsedJson["phoneNo"] = userthis.phoneNo;
+    parsedJson["_id"] = userthis.sid;
+    parsedJson["friendList"] = userthis.friendList;
+    parsedJson["accessToken"] = userthis.accessToken;
+    parsedJson["refreshToken"] = userthis.refreshToken;
+    return parsedJson;
   }
 
 //mark: Listen
   _listenBlocData() {
-    authBloc.streamUserInfo.listen((response) async {
+    authBloc.streamUserInfo.listen((response) {
       // emailController.clear();
       // passwordController.clear();
       if (response.status == 200) {
         setState(() {
           isApiCallInProgress = false;
 
-          // var data =
-          //          StoreUserInPreference.storeUser(response.user.toString());
-          //     print(data);
-          //     var userdetails = await StoreUserInPreference.fetchUser();
-          //     print(userdetails);
-
-          Navigator.push(
-            contextMain,
-            MaterialPageRoute(builder: (context) {
-              return HomeUI();
-            }),
-          );
+          Navigator.pushAndRemoveUntil(contextMain,
+              MaterialPageRoute(builder: (context) {
+            return HomeUI();
+          }), ModalRoute.withName('/'));
         });
       } else {
         print("Something went wronnggggg---");

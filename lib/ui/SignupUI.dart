@@ -261,12 +261,10 @@ password2:amit@1234
         setState(() {
           isApiCallInProgress = false;
 
-          Navigator.push(
-            contextMain,
-            MaterialPageRoute(builder: (context) {
-              return HomeUI();
-            }),
-          );
+          Navigator.pushAndRemoveUntil(contextMain,
+              MaterialPageRoute(builder: (context) {
+            return HomeUI();
+          }), ModalRoute.withName('/'));
         });
       } else {
         print("Something went wronnggggg---");
