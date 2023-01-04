@@ -79,18 +79,18 @@ class LoginResponse extends Object {
 
 class StoreUserInPreference {
   static storeUser(Map<String, dynamic> parsedJson) async {
-    SharedPreferences shared_User = await SharedPreferences.getInstance();
-    Map decode_options = jsonDecode(parsedJson.toString());
-    String user = jsonEncode(UserModel.fromJson(decode_options));
-    shared_User.setString('user', user);
+    SharedPreferences sharedUser = await SharedPreferences.getInstance();
+    Map decodeOptions = jsonDecode(parsedJson.toString());
+    String user = jsonEncode(UserModel.fromJson(decodeOptions));
+    sharedUser.setString('user', user);
     log("usererrrrr -- $user");
     return user;
   }
 
   static fetchUser() async {
-    SharedPreferences shared_User = await SharedPreferences.getInstance();
-    if (shared_User.getString('user') != null) {
-      Map userMap = jsonDecode(shared_User.getString('user')!);
+    SharedPreferences sharedUser = await SharedPreferences.getInstance();
+    if (sharedUser.getString('user') != null) {
+      Map userMap = jsonDecode(sharedUser.getString('user')!);
       var user = UserModel.fromJson(userMap);
       print("HERE WE GOOOOO----");
       print(user.email);

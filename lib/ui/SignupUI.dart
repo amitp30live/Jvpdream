@@ -1,6 +1,7 @@
-import 'dart:developer';
-import '../utils/extension/validation.dart';
+// ignore_for_file: prefer_const_constructors
+import 'package:jvdream/ui/BaseUI.dart';
 
+import '../utils/extension/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:jvdream/blocs/auth_bloc.dart';
 import 'package:jvdream/ui/HomeUI.dart';
@@ -14,29 +15,24 @@ class SignupUI extends StatefulWidget {
   State<SignupUI> createState() => _SignupUIState();
 }
 
-class _SignupUIState extends State<SignupUI> {
+class _SignupUIState extends BaseStatefulState<SignupUI> with ValidationMixin {
   final emailController = TextEditingController();
   final firstnameController = TextEditingController();
   final lastnameController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final phoneNoController = TextEditingController();
-  var isApiCallInProgress = false;
-  late BuildContext contextMain;
 
-  var signupData = Map<String, String>();
+  var signupData = <String, String>{};
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _listenBlocData();
   }
 
+  @override
   Widget build(BuildContext context) {
     double scrnWidth = MediaQuery.of(context).size.width;
-    double scrnHeight = MediaQuery.of(context).size.height;
-    double txtfldHeight = scrnWidth * .15;
-    var inputData = Map<String, String>();
     contextMain = context;
 
     return Scaffold(
@@ -55,86 +51,61 @@ class _SignupUIState extends State<SignupUI> {
             )
           : SingleChildScrollView(
               padding: EdgeInsets.all(20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //  topLogo(),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //  topLogo(),
 
-                  CommonWidgets.appIcon(scrnWidth * 0.35),
-                  Container(
-                    height: 10,
-                  ),
+                    CommonWidgets.appIcon(scrnWidth * 0.35),
+                    Container(
+                      height: 10,
+                    ),
 
-                  aTextFieldWidget(firstnameController, "First Name",
-                      "First Name", false, txtfldHeight),
-                  Container(
-                    height: 8,
-                  ),
-                  aTextFieldWidget(lastnameController, "Last Name", "Last Name",
-                      false, txtfldHeight),
-                  Container(
-                    height: 8,
-                  ),
-                  aTextFieldWidget(
-                      emailController, "Email", "Email", false, txtfldHeight),
-                  Container(
-                    height: 8,
-                  ),
-                  aTextFieldWidget(passwordController, "Password", "Password",
-                      true, txtfldHeight),
-                  Container(
-                    height: 8,
-                  ),
-                  aTextFieldWidget(
-                      confirmPasswordController,
-                      "Confirm Password",
-                      "Confirm password",
-                      true,
-                      txtfldHeight),
-                  Container(
-                    height: 8,
-                  ),
-                  aTextFieldWidget(phoneNoController, "Phone No", "Phone No",
-                      false, txtfldHeight),
+                    aTextFieldWidget(
+                        firstnameController, "First Name", "First Name", false),
+                    Container(
+                      height: 8,
+                    ),
+                    aTextFieldWidget(
+                        lastnameController, "Last Name", "Last Name", false),
+                    Container(
+                      height: 8,
+                    ),
+                    aTextFieldWidget(emailController, "Email", "Email", false),
+                    Container(
+                      height: 8,
+                    ),
+                    aTextFieldWidget(
+                        passwordController, "Password", "Password", true),
+                    Container(
+                      height: 8,
+                    ),
+                    aTextFieldWidget(confirmPasswordController,
+                        "Confirm Password", "Confirm password", true),
+                    Container(
+                      height: 8,
+                    ),
+                    aTextFieldWidget(
+                        phoneNoController, "Phone No", "Phone No", false),
 
-                  //  emailTextFieldWidget(),
-                  Container(height: 20),
+                    //  emailTextFieldWidget(),
+                    Container(height: 20),
 
-                  ThemeButton.btnRound("Create Account", _btnCreatePressed),
-                  Container(
-                    height: 16,
-                  ),
-                  alreadyHaveAccountWidget(),
-                  Container(
-                    height: 16,
-                  ),
-                ],
+                    ThemeButton.btnRound("Create Account", _btnCreatePressed),
+                    Container(
+                      height: 16,
+                    ),
+                    alreadyHaveAccountWidget(),
+                    Container(
+                      height: 16,
+                    ),
+                  ],
+                ),
               ),
             ),
-    );
-  }
-
-  Widget _textLogin() {
-    return const Text("LOGIN",
-        style: TextStyle(
-            fontSize: 36.0,
-            fontWeight: FontWeight.bold,
-            height: 1.3,
-            color: Colors.black //You can set your custom height here
-            ));
-  }
-
-  Widget _btnForgotPassword(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        TextButton(
-          style: flatButtonStyle,
-          onPressed: () {},
-          child: Text('Forgot Password?'),
-        ),
-      ],
     );
   }
 
@@ -148,12 +119,12 @@ class _SignupUIState extends State<SignupUI> {
   );
 
   Widget aTextFieldWidget(TextEditingController controller, String name,
-      String placeHolderText, bool isSecured, double txtFldheight) {
+      String placeHolderText, bool isSecured) {
     return Container(
-      height: txtFldheight,
+      //height: txtFldheight,
       color: Colors.grey[100],
       margin: EdgeInsets.symmetric(horizontal: 5),
-      child: TextField(
+      child: TextFormField(
         onChanged: (value) {
           //print(value.isValidEmail());
           controllerForUpdatedata(controller, value);
@@ -167,6 +138,10 @@ class _SignupUIState extends State<SignupUI> {
           //border: OutlineInputBorder(),
           labelText: placeHolderText,
         ),
+        validator: (value) {
+          // SampleEnum.second
+          return validateErrorMsg(controller, value);
+        },
       ),
     );
   }
@@ -197,25 +172,60 @@ password2:amit@1234
     print(signupData);
   }
 
+  validateErrorMsg(TextEditingController controller, String? value) {
+    if (controller == firstnameController) {
+      return validateFirstName(value);
+    } else if (controller == lastnameController) {
+      return validateLastName(value);
+    } else if (controller == emailController) {
+      return validateEmail(value);
+    } else if (controller == passwordController) {
+      return validatePassword(value);
+    } else if (controller == phoneNoController) {
+      return validatePhoneNmbr(value);
+    } else if (controller == confirmPasswordController) {
+      var pass = validatePassword(value);
+      if (pass != null) {
+        if (signupData["password"] != signupData["password2"]) {
+          return 'Password and confirm password not matched';
+        }
+      }
+      return pass;
+    }
+  }
+
   _btnCreatePressed() {
     print("btn Create Pressed");
 
-    var showSnacbarText = "";
-    for (var z in signupData.keys) {
-      final SignupEnum nameEnum =
-          SignupEnum.values.byName(z); // SampleEnum.second
-      showSnacbarText = getValidationError(nameEnum);
-      print(showSnacbarText);
-      if (showSnacbarText.isNotEmpty) {
-        SnackbarClass.createSnackBar(showSnacbarText, contextMain);
-        return;
+    // var showSnacbarText = "";
+    // for (var z in signupData.keys) {
+    //   final SignupEnum nameEnum =
+    //       SignupEnum.values.byName(z); // SampleEnum.second
+    //   showSnacbarText = getValidationError(nameEnum);
+    //   print(showSnacbarText);
+    //   if (showSnacbarText.isNotEmpty) {
+    //     SnackbarClass.createSnackBar(showSnacbarText, contextMain);
+    //     return;
+    //   }
+    // }
+
+    if (formKey.currentState != null) {
+      if (formKey.currentState!.validate()) {
+        formKey.currentState!.save();
+
+        if (mounted) {
+          if (!isConnectionAvailable) {
+            SnackbarClass.createSnackBar(
+                "No Internet connection available.", contextMain);
+            return;
+          }
+          setState(() {
+            isApiCallInProgress = true;
+          });
+          authBloc.doSignup(signupData);
+        }
       }
     }
-
-    setState(() {
-      isApiCallInProgress = true;
-    });
-    authBloc.doSignup(signupData);
   }
 
   Widget alreadyHaveAccountWidget() {
@@ -242,25 +252,25 @@ password2:amit@1234
   }
 
   _listenBlocData() {
-    signupData["firstName"] = "";
-    signupData["lastName"] = "";
-    signupData["email"] = "";
-    signupData["password"] = "";
-    signupData["phoneNo"] = "";
-    signupData["password2"] = "";
+    // signupData["firstName"] = "";
+    // signupData["lastName"] = "";
+    // signupData["email"] = "";
+    // signupData["password"] = "";
+    // signupData["phoneNo"] = "";
+    // signupData["password2"] = "";
 
     authBloc.streamUserInfo.listen((response) async {
-      emailController.clear();
-      passwordController.clear();
-      firstnameController.clear();
-      lastnameController.clear();
-      confirmPasswordController.clear();
-
-      phoneNoController.clear();
       if (response.status == 200) {
+        // emailController.clear();
+        // passwordController.clear();
+        // firstnameController.clear();
+        // lastnameController.clear();
+        // confirmPasswordController.clear();
+        // phoneNoController.clear();
         setState(() {
           isApiCallInProgress = false;
-
+          SnackbarClass.createSnackBar(
+              "Created account successfully..", contextMain);
           Navigator.pushAndRemoveUntil(contextMain,
               MaterialPageRoute(builder: (context) {
             return HomeUI();
@@ -268,6 +278,8 @@ password2:amit@1234
         });
       } else {
         print("Something went wronnggggg---");
+        SnackbarClass.createSnackBar(response.message, contextMain);
+
         setState(() {
           isApiCallInProgress = false;
         });

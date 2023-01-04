@@ -34,34 +34,72 @@ mixin ValidationMixin {
         r'[0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9]'
         r'[0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\'
         r'x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])';
-    final regex = RegExp(pattern);
+    RegExp regex = RegExp(pattern);
 
-    if (value!.isNotEmpty) {
+    if (value!.isEmpty) {
       return 'Please enter email';
-    } else if (!regex.hasMatch(value)) {
-      return 'Enter a valid email address';
     } else {
-      return null;
-    }
-  }
-}
-
-String? validatePassword(String? value) {
-  RegExp regex =
-      //  RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
-      RegExp(r'^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{6,}$');
-
-  if (value!.isEmpty) {
-    return 'Please enter password';
-  } else {
-    if (!regex.hasMatch(value)) {
-      return 'Enter valid password';
-    } else {
-      return null;
+      if (!regex.hasMatch(value)) {
+        return 'Enter a valid email address';
+      } else {
+        return null;
+      }
     }
   }
 
-  /*
+  String? validatePhoneNmbr(String? value) {
+    RegExp regex = RegExp(r"^[0-9]{10}$");
+
+    if (value!.isEmpty) {
+      return 'Please enter phone number';
+    } else {
+      if (!regex.hasMatch(value)) {
+        return 'Enter a valid phone number';
+      } else {
+        return null;
+      }
+    }
+  }
+
+  String? validateFirstName(String? value) {
+    if (value!.isEmpty) {
+      return 'Please enter first name';
+    } else {
+      if (value.length <= 3) {
+        return 'Enter enter first name more than 3 characters';
+      } else {
+        return null;
+      }
+    }
+  }
+
+  String? validateLastName(String? value) {
+    if (value!.isEmpty) {
+      return 'Please enter last name';
+    } else {
+      if (value.length <= 1) {
+        return 'Enter enter last name more than 1 character';
+      } else {
+        return null;
+      }
+    }
+  }
+
+  String? validatePassword(String? value) {
+    //  RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+    final regex = RegExp(r'^.{6}/pre>');
+
+    if (value!.isEmpty) {
+      return 'Please enter password';
+    } else {
+      if (value.length < 5) {
+        return 'Enter valid password';
+      } else {
+        return null;
+      }
+    }
+
+    /*
   r'^
   (?=.*[A-Z])       // should contain at least one upper case
   (?=.*[a-z])       // should contain at least one lower case
@@ -70,4 +108,5 @@ String? validatePassword(String? value) {
   .{8,}             // Must be at least 8 characters in length  
 $
   */
+  }
 }

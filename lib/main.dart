@@ -32,10 +32,10 @@ class RootApp extends StatelessWidget {
 class Auth {
   Future<bool> isLogged() async {
     try {
-      SharedPreferences shared_User = await SharedPreferences.getInstance();
+      SharedPreferences sharedUser = await SharedPreferences.getInstance();
 
-      if (shared_User.getString('user') != null) {
-        Map userMap = jsonDecode(shared_User.getString('user')!);
+      if (sharedUser.getString('user') != null) {
+        Map userMap = jsonDecode(sharedUser.getString('user')!);
         var user = UserModel.fromJson(userMap);
         return true;
       }

@@ -1,6 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:jvdream/ui/BaseUI.dart';
 import 'package:jvdream/ui/SignupUI.dart';
-import '../common_widgets/common_style.dart';
 import '../ui/LoginUI.dart';
 
 class InitialUI extends StatefulWidget {
@@ -11,6 +13,12 @@ class InitialUI extends StatefulWidget {
 }
 
 class _InitialUIState extends State<InitialUI> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,12 +85,10 @@ class _InitialUIState extends State<InitialUI> {
       height: 45,
       child: ElevatedButton(
         onPressed: () => {
-          // Navigator.push(
-          //     context, MaterialPageRoute(builder: (context) => const LoginUI()))
-
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => LoginUI()))
         },
+        // ignore: sort_child_properties_last
         child: Text(text, style: TextStyle(fontSize: 16)),
         style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(

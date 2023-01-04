@@ -8,6 +8,7 @@
 import 'dart:io'; // flutter_ignore: dart_io_import.
 import 'package:shared_preferences_android/shared_preferences_android.dart';
 import 'package:shared_preferences_ios/shared_preferences_ios.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:shared_preferences_linux/shared_preferences_linux.dart';
 import 'package:shared_preferences_macos/shared_preferences_macos.dart';
 import 'package:shared_preferences_windows/shared_preferences_windows.dart';
@@ -40,6 +41,16 @@ class _PluginRegistrant {
       }
 
     } else if (Platform.isLinux) {
+      try {
+        ConnectivityPlusLinuxPlugin.registerWith();
+      } catch (err) {
+        print(
+          '`connectivity_plus` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+        rethrow;
+      }
+
       try {
         SharedPreferencesLinux.registerWith();
       } catch (err) {

@@ -1,7 +1,7 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:jvdream/blocs/auth_bloc.dart';
 import 'package:jvdream/models/user_model.dart';
+import 'package:jvdream/ui/BaseUI.dart';
 import 'package:jvdream/ui/HomeUI.dart';
 import 'package:jvdream/ui/SignupUI.dart';
 import '../common_widgets/common_style.dart';
@@ -15,14 +15,10 @@ class LoginUI extends StatefulWidget {
 }
 // ignore: prefer_const_constructors
 
-class _LoginUIState extends State<LoginUI> with ValidationMixin {
+class _LoginUIState extends BaseStatefulState<LoginUI> with ValidationMixin {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  var loginData = Map<String, String>();
-  var isApiCallInProgress = false;
-  late BuildContext contextMain;
-
-  final _formKey = GlobalKey<FormState>();
+  var loginData = <String, String>{};
 
   @override
   void initState() {
@@ -59,7 +55,7 @@ class _LoginUIState extends State<LoginUI> with ValidationMixin {
           : SingleChildScrollView(
               padding: const EdgeInsets.all(25),
               child: Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,8 +126,9 @@ class _LoginUIState extends State<LoginUI> with ValidationMixin {
           //border: OutlineInputBorder(),
           labelText: 'Email',
         ),
-        validator: validateEmail
-        /*(value) {
+        validator:
+            //validateEmail
+            (value) {
           if (value!.isEmpty) {
             return 'Please enter a valid email address';
           }
@@ -139,8 +136,7 @@ class _LoginUIState extends State<LoginUI> with ValidationMixin {
             return 'Email is invalid, must contain @';
           }
           return null;
-        }*/
-        ,
+        },
       ),
     );
   }
@@ -202,10 +198,16 @@ class _LoginUIState extends State<LoginUI> with ValidationMixin {
       }
     }
     */
-    if (_formKey.currentState != null) {
-      if (_formKey.currentState!.validate()) {
-        _formKey.currentState!.save();
+
+    if (formKey.currentState != null) {
+      if (formKey.currentState!.validate()) {
+        formKey.currentState!.save();
         if (mounted) {
+          if (!isConnectionAvailable) {
+            SnackbarClass.createSnackBar(
+                "No Internet connection available.", contextMain);
+            return;
+          }
           setState(() {
             isApiCallInProgress = true;
           });
