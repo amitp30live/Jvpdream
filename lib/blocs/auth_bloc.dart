@@ -4,14 +4,7 @@ import 'package:jvdream/resources/auth_repository.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum SignupEnum {
-  firstName,
-  lastName,
-  email,
-  password,
-  password2,
-  phoneNo;
-}
+enum SignupEnum { firstName, lastName, email, password, password2, phoneNo }
 
 class AuthBloc {
   final authRepo = AuthRepository();

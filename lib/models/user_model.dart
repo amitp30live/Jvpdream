@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:jvdream/models/base_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
@@ -26,21 +27,21 @@ class UserModel {
   late String firstName;
   late String lastName;
   late String email;
-  late String phoneNo;
+  String? phoneNo;
   late String sid;
-  late List<dynamic> friendList;
-  late String accessToken;
-  late String refreshToken;
+  List<dynamic>? friendList;
+  String? accessToken;
+  String? refreshToken;
 
   UserModel(
       {required this.firstName,
       required this.lastName,
       required this.email,
-      required this.phoneNo,
+      this.phoneNo,
       required this.sid,
-      required this.friendList,
-      required this.refreshToken,
-      required this.accessToken});
+      this.friendList,
+      this.refreshToken,
+      this.accessToken});
 
   UserModel.fromJson(Map<dynamic, dynamic> userInfo) {
     var parsedJson = userInfo["UserInfo"];
@@ -56,7 +57,7 @@ class UserModel {
   }
 
   UserModel.dummy() {
-    UserModel user = UserModel(
+    UserModel(
         firstName: "",
         lastName: "",
         email: "",
@@ -68,13 +69,16 @@ class UserModel {
   }
 }
 
-class LoginResponse extends Object {
+class LoginResponse extends BaseResponse {
+  @override
   late int status;
+  @override
   late String message;
   late UserModel user;
 
   LoginResponse(
-      {required this.status, required this.message, required this.user});
+      {required this.status, required this.message, required this.user})
+      : super(message: message, status: status);
 }
 
 class StoreUserInPreference {
