@@ -1,0 +1,1 @@
+// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, sized_box_for_whitespace

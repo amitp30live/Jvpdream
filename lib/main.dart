@@ -1,9 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:jvdream/models/user_model.dart';
 import 'package:jvdream/ui/HomeUI.dart';
 import 'package:jvdream/ui/InitialUI.dart';
+import 'package:jvdream/ui/TabScreens/Tabbar.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -12,6 +13,17 @@ void main() async {
   Auth _auth = Auth();
 
   bool isLogged = await _auth.isLogged();
+  if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
+    // Use location.
+    print("allowed");
+  }
+  // You can request multiple permissions at once.
+  Map<Permission, PermissionStatus> statuses = await [
+    Permission.location,
+    Permission.storage,
+    Permission.camera,
+  ].request();
+  print(statuses[Permission.location]);
 
   runApp(RootApp(isLoggedIn: isLogged));
 }
@@ -24,7 +36,7 @@ class RootApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       themeMode: ThemeMode.dark,
-      home: isLoggedIn ? HomeUI() : InitialUI(),
+      home: isLoggedIn ? TabbarPage() : InitialUI(),
     );
   }
 }

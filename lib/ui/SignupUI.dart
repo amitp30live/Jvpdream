@@ -1,11 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:jvdream/ui/BaseUI.dart';
+import 'package:jvdream/ui/TabScreens/Tabbar.dart';
 
 import '../utils/extension/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:jvdream/blocs/auth_bloc.dart';
 import 'package:jvdream/ui/HomeUI.dart';
-import '../common_widgets/common_style.dart';
+import '../utils/extension/common_widgets/common_style.dart';
 import '../ui/LoginUI.dart';
 
 class SignupUI extends StatefulWidget {
@@ -273,7 +274,7 @@ password2:amit@1234
               "Created account successfully..", contextMain);
           Navigator.pushAndRemoveUntil(contextMain,
               MaterialPageRoute(builder: (context) {
-            return HomeUI();
+            return TabbarPage();
           }), ModalRoute.withName('/'));
         });
       } else {

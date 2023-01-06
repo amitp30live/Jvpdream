@@ -4,7 +4,8 @@ import 'package:jvdream/models/user_model.dart';
 import 'package:jvdream/ui/BaseUI.dart';
 import 'package:jvdream/ui/HomeUI.dart';
 import 'package:jvdream/ui/SignupUI.dart';
-import '../common_widgets/common_style.dart';
+import 'package:jvdream/ui/TabScreens/Tabbar.dart';
+import '../utils/extension/common_widgets/common_style.dart';
 import '../utils/extension/validation.dart';
 
 class LoginUI extends StatefulWidget {
@@ -241,7 +242,7 @@ class _LoginUIState extends BaseStatefulState<LoginUI> with ValidationMixin {
 
           Navigator.pushAndRemoveUntil(contextMain,
               MaterialPageRoute(builder: (context) {
-            return HomeUI();
+            return TabbarPage();
           }), ModalRoute.withName('/'));
         });
       } else {
