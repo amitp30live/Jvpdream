@@ -15,8 +15,8 @@ void main() async {
   // You can request multiple permissions at once.
   Map<Permission, PermissionStatus> statuses = await [
     Permission.location,
-    Permission.storage,
-    Permission.camera,
+    // Permission.storage,
+    // Permission.camera,
   ].request();
   print(statuses[Permission.location]);
 
@@ -25,7 +25,7 @@ void main() async {
 
 class RootApp extends StatelessWidget {
   final bool isLoggedIn;
-  RootApp({super.key, required this.isLoggedIn});
+  const RootApp({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
