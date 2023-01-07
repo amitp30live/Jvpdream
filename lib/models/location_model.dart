@@ -7,7 +7,7 @@ class NearbyLocationList {
   NearbyLocationList.fromJson(List<dynamic> parsedJson) {
     List<LocationModel> listData = [];
     for (int i = 0; i < parsedJson.length; i++) {
-      listData.add(LocationModel.fromJson(parsedJson[i]));
+      listData.add(LocationModel.fromNearbyListJson(parsedJson[i]));
     }
     listLocationData = listData;
   }
@@ -28,6 +28,21 @@ class LocationModel {
 
   LocationModel.fromJson(Map<String, dynamic> parsedJson) {
     userModel = UserModel.fromLocationJson(parsedJson["contactObj"]);
+    address = parsedJson["address"];
+    city = parsedJson["city"];
+    country = parsedJson["country"];
+    pincode = parsedJson["pincode"].toString();
+    state = parsedJson["state"];
+    Map<String, dynamic> locationData = parsedJson["location"];
+    if (locationData.length > 0) {
+      List<dynamic> data = locationData["coordinates"];
+      coordinates = Coordinates.fromJson(data);
+    }
+    print(parsedJson["location"][1]);
+  }
+
+  LocationModel.fromNearbyListJson(Map<String, dynamic> parsedJson) {
+    userModel = UserModel.fromLocationJson(parsedJson["result"]);
     address = parsedJson["address"];
     city = parsedJson["city"];
     country = parsedJson["country"];

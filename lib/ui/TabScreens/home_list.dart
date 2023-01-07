@@ -25,6 +25,7 @@ class _HomeListUIState extends BaseStatefulState<HomeListUI> {
 
     datacall();
     getPosition();
+    _listenBlocData();
   }
 
   @override
@@ -106,7 +107,7 @@ class _HomeListUIState extends BaseStatefulState<HomeListUI> {
     dictAddressData["longitude"] = "${position.longitude}";
 
     print(addressC);
-    locationBloc.addLocationDetails(dictAddressData);
+    // locationBloc.addLocationDetails(dictAddressData);
 
     Map<String, String> dict = {};
     dict["latitude"] = "${position.latitude}";
