@@ -35,7 +35,7 @@ class Coordinates {
   }
 }
 
-class LocationResponse extends BaseResponse {
+class LocationResponse extends BaseDataRes {
   LocationModel locationModel;
 
   LocationResponse(

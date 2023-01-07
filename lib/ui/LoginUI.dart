@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:jvdream/blocs/auth_bloc.dart';
 import 'package:jvdream/models/user_model.dart';
 import 'package:jvdream/ui/BaseUI.dart';
-import 'package:jvdream/ui/HomeUI.dart';
 import 'package:jvdream/ui/SignupUI.dart';
 import 'package:jvdream/ui/TabScreens/Tabbar.dart';
 import '../utils/extension/common_widgets/common_style.dart';

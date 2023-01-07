@@ -1,21 +1,16 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:jvdream/models/user_model.dart';
-import 'package:jvdream/ui/HomeUI.dart';
+import 'package:jvdream/resources/storePreference.dart';
 import 'package:jvdream/ui/InitialUI.dart';
 import 'package:jvdream/ui/TabScreens/Tabbar.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  Auth _auth = Auth();
-
-  bool isLogged = await _auth.isLogged();
+  bool isLogged = await auth.isLoggedUser();
   if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
     // Use location.
-    print("allowed");
+    print("location permission allowed");
   }
   // You can request multiple permissions at once.
   Map<Permission, PermissionStatus> statuses = await [
@@ -41,22 +36,6 @@ class RootApp extends StatelessWidget {
   }
 }
 
-class Auth {
-  Future<bool> isLogged() async {
-    try {
-      SharedPreferences sharedUser = await SharedPreferences.getInstance();
-
-      if (sharedUser.getString('user') != null) {
-        Map userMap = jsonDecode(sharedUser.getString('user')!);
-        var user = UserModel.fromJson(userMap);
-        return true;
-      }
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
-}
 
 //Font Size Dynamic
 //Each Height needs to b dynamic as per device height

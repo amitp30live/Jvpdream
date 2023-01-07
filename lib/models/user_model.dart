@@ -69,7 +69,7 @@ class UserModel {
   }
 }
 
-class LoginResponse extends BaseResponse {
+class LoginResponse extends BaseDataRes {
   @override
   late int status;
   @override
@@ -81,6 +81,7 @@ class LoginResponse extends BaseResponse {
       : super(message: message, status: status);
 }
 
+/*
 class StoreUserInPreference {
   static storeUser(Map<String, dynamic> parsedJson) async {
     SharedPreferences sharedUser = await SharedPreferences.getInstance();
@@ -102,3 +103,4 @@ class StoreUserInPreference {
     }
   }
 }
+*/
