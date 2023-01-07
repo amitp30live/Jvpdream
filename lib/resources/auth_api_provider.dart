@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:jvdream/models/base_response.dart';
+import 'package:jvdream/models/location_model.dart';
 import 'package:jvdream/resources/api_urls.dart';
 import 'package:jvdream/models/user_model.dart';
 import 'package:jvdream/resources/store_preference.dart';
@@ -57,4 +58,30 @@ class AuthApiProvider with CheckInternetConnection, StorePreferneceData {
   }
   */
 
+  Future<LocationResponse> addLocationData(Map<String, String> body, String url,
+      Map<String, String> headerParams) async {
+    var checkConnection = await checkInternetConnectivity();
+    if (!checkConnection) {
+      return auth.dummyLocationResponse();
+    }
+
+    final response =
+        await client.post(Uri.parse(url), body: body, headers: headerParams);
+    print(json.decode(response.body));
+
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.body);
+      LocationModel amodel = LocationModel.fromJson(jsonData["data"]);
+      LocationResponse loginResp = LocationResponse(
+          message: "User retrieved",
+          status: response.statusCode,
+          locationModel: amodel);
+      return loginResp;
+    } else {
+      return LocationResponse(
+          message: json.decode(response.body)["message"],
+          status: response.statusCode,
+          locationModel: LocationModel.dummy());
+    }
+  }
 }

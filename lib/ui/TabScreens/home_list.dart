@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:jvdream/blocs/location_bloc.dart';
 import 'package:jvdream/ui/initial_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,19 +30,22 @@ class _HomeListUIState extends State<HomeListUI> {
   datacall() async {
     var latlong = await _determinePosition();
     setAddressData(latlong);
-    /*
-  'name': name,
-        'street': street,
-        'isoCountryCode': isoCountryCode,
-        'country': country,
-        'postalCode': postalCode,
-        'administrativeArea': administrativeArea,
-        'subAdministrativeArea': subAdministrativeArea,
-        'locality': locality,
-        'subLocality': subLocality,
-        'thoroughfare': thoroughfare,
-        'subThoroughfare': subThoroughfare,
-    */
+  }
+
+  _listenBlocData() {
+    locationBloc.streamUserInfo.listen((response) {
+      if (response.status == 200) {
+        // setState(() {
+        //   isApiCallInProgress = false;
+        // });
+      } else {
+        print("Something went wronnggggg---");
+        //SnackbarClass.createSnackBar(response.message, contextMain);
+        // setState(() {
+        //   isApiCallInProgress = false;
+        // });
+      }
+    });
   }
 
   void setAddressData(Position position) async {
@@ -59,8 +63,44 @@ class _HomeListUIState extends State<HomeListUI> {
     String? addressC =
         "$name, $subLocality, $locality, $administrativeArea $postalCode, $country";
 
-    print(addressC);
+    dictAddressData["address"] = addressC;
+    dictAddressData["name"] = name ?? "";
 
+    dictAddressData["city"] = locality ?? "";
+    dictAddressData["state"] = administrativeArea ?? "";
+    dictAddressData["country"] = country ?? "";
+    dictAddressData["pincode"] = postalCode ?? "";
+// position.latitude, position.longitude
+    dictAddressData["latitude"] = "${position.latitude}";
+    dictAddressData["longitude"] = "${position.longitude}";
+
+    print(addressC);
+    await locationBloc.addLocationDetails(dictAddressData);
+    /*
+  flutter: {name: New SG Road, street: New SG Road, isoCountryCode: IN, country: India,
+   postalCode: 382481, administrativeArea: GJ, subAdministrativeArea: Ahmedabad, 
+   locality: Ahmedabad, subLocality: Gota, thoroughfare: New SG Road, subThoroughfare: }
+
+  address:Himalaya Mall, Drive In Rd, Nilmani Society, Gurukul, Ahmedabad, Gujarat 380006
+city:Ahmedabad
+state:Gujarat
+country:India
+pincode:380006
+latitude:23.0463768
+longitude:72.5266095
+contactObj:63b83e2458108e5704758ebd
+  'name': name,
+        'street': street,
+        'isoCountryCode': isoCountryCode,
+        'country': country,
+        'postalCode': postalCode,
+        'administrativeArea': administrativeArea,
+        'subAdministrativeArea': subAdministrativeArea,
+        'locality': locality,
+        'subLocality': subLocality,
+        'thoroughfare': thoroughfare,
+        'subThoroughfare': subThoroughfare,
+    */
     setState(() {
       address = addressC; // update _address
     });

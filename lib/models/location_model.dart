@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:jvdream/models/base_response.dart';
 import 'package:jvdream/models/user_model.dart';
 
@@ -11,13 +13,22 @@ class LocationModel {
   Coordinates? coordinates;
 
   LocationModel.fromJson(Map<String, dynamic> parsedJson) {
-    userModel = UserModel.fromJson(parsedJson["contactObj"]);
+    userModel = UserModel.fromLocationJson(parsedJson["contactObj"]);
     address = parsedJson["address"];
     city = parsedJson["city"];
     country = parsedJson["country"];
-    pincode = parsedJson["pincode"];
+    pincode = parsedJson["pincode"].toString();
     state = parsedJson["state"];
-    coordinates = Coordinates.fromJson(parsedJson["coordinates"]);
+    Map<String, dynamic> locationData = parsedJson["location"];
+    if (locationData.length > 0) {
+      List<dynamic> data = locationData["coordinates"];
+      coordinates = Coordinates.fromJson(data);
+    }
+    print(parsedJson["location"][1]);
+  }
+
+  LocationModel.dummy() {
+    userModel = UserModel.dummy();
   }
 
   LocationModel({required this.userModel});
@@ -27,8 +38,8 @@ class Coordinates {
   late String latitude;
   late String longitude;
 
-  Coordinates.fromJson(List<int> data) {
-    if (data.isNotEmpty) {
+  Coordinates.fromJson(List<dynamic> data) {
+    if (data.length > 0) {
       latitude = data[1].toString();
       longitude = data[0].toString();
     }

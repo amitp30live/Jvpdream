@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:jvdream/models/base_response.dart';
+import 'package:jvdream/models/location_model.dart';
 import 'package:jvdream/models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,11 +44,26 @@ class Auth with StorePreferneceData {
     return false;
   }
 
+  Future<UserModel?> loggedUser() async {
+    UserModel? user = await getUserFromPreference();
+    if (user != null) {
+      return user;
+    }
+    return null;
+  }
+
   LoginResponse dummyLoginResponse() {
     return LoginResponse(
         message: "No internet Connection",
         status: 404,
         user: UserModel.dummy());
+  }
+
+  LocationResponse dummyLocationResponse() {
+    return LocationResponse(
+        message: "No internet Connection",
+        status: 404,
+        locationModel: LocationModel.dummy());
   }
 }
 

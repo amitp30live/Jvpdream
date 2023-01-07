@@ -56,6 +56,16 @@ class UserModel {
     refreshToken = parsedJson["refreshToken"];
   }
 
+  UserModel.fromLocationJson(Map<dynamic, dynamic> parsedJson) {
+    firstName = parsedJson["firstName"];
+    lastName = parsedJson["lastName"];
+    email = parsedJson["email"];
+    phoneNo = parsedJson["phoneNo"].toString();
+    sid = parsedJson["_id"].toString();
+    friendList = parsedJson["friendList"];
+    accessToken = parsedJson["accessToken"];
+    refreshToken = parsedJson["refreshToken"];
+  }
   UserModel.dummy() {
     UserModel(
         firstName: "",
