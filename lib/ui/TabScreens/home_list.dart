@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:jvdream/ui/InitialUI.dart';
+import 'package:jvdream/ui/initial_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: import_of_legacy_library_into_null_safe

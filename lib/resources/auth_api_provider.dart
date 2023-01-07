@@ -3,7 +3,7 @@ import 'package:http/http.dart';
 import 'package:jvdream/models/base_response.dart';
 import 'package:jvdream/resources/api_urls.dart';
 import 'package:jvdream/models/user_model.dart';
-import 'package:jvdream/resources/storePreference.dart';
+import 'package:jvdream/resources/store_preference.dart';
 
 class AuthApiProvider with CheckInternetConnection, StorePreferneceData {
   Client client = Client();

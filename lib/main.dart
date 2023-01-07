@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jvdream/resources/storePreference.dart';
-import 'package:jvdream/ui/InitialUI.dart';
-import 'package:jvdream/ui/TabScreens/Tabbar.dart';
+import 'package:jvdream/resources/store_preference.dart';
+import 'package:jvdream/ui/initial_ui.dart';
+import 'package:jvdream/ui/TabScreens/tabbar.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void main() async {

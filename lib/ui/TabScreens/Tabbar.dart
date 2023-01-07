@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:jvdream/ui/HomeUI.dart';
-import 'package:jvdream/ui/TabScreens/Friends.dart';
-import 'package:jvdream/ui/TabScreens/HomeList.dart';
-import 'package:jvdream/ui/TabScreens/Posts.dart';
-import 'package:jvdream/ui/TabScreens/Settings.dart';
+import 'package:jvdream/ui/TabScreens/friends.dart';
+import 'package:jvdream/ui/TabScreens/home_list.dart';
+import 'package:jvdream/ui/TabScreens/posts.dart';
+import 'package:jvdream/ui/TabScreens/settings.dart';
 
 class TabbarPage extends StatefulWidget {
   const TabbarPage({Key? key}) : super(key: key);

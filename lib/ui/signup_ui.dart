@@ -1,13 +1,12 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:jvdream/ui/BaseUI.dart';
-import 'package:jvdream/ui/TabScreens/Tabbar.dart';
+import 'package:jvdream/ui/base_ui.dart';
+import 'package:jvdream/ui/TabScreens/tabbar.dart';
 
 import '../utils/extension/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:jvdream/blocs/auth_bloc.dart';
-import 'package:jvdream/ui/HomeUI.dart';
 import '../utils/extension/common_widgets/common_style.dart';
-import '../ui/LoginUI.dart';
+import 'login_ui.dart';
 
 class SignupUI extends StatefulWidget {
   const SignupUI({super.key});
