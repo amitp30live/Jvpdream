@@ -84,4 +84,31 @@ class AuthApiProvider with CheckInternetConnection, StorePreferneceData {
           locationModel: LocationModel.dummy());
     }
   }
+
+  Future<NearbyLocationResponse> nearByLocationData(Map<String, String> body,
+      String url, Map<String, String> headerParams) async {
+    var checkConnection = await checkInternetConnectivity();
+    if (!checkConnection) {
+      return auth.dummyNearByLocationResponse();
+    }
+
+    final response =
+        await client.post(Uri.parse(url), body: body, headers: headerParams);
+    print(json.decode(response.body));
+
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.body);
+      NearbyLocationList amodel = NearbyLocationList.fromJson(jsonData["data"]);
+      NearbyLocationResponse loginResp = NearbyLocationResponse(
+          message: "User retrieved",
+          status: response.statusCode,
+          listLocations: amodel);
+      return loginResp;
+    } else {
+      return NearbyLocationResponse(
+          message: json.decode(response.body)["message"],
+          status: response.statusCode,
+          listLocations: NearbyLocationList.dummy());
+    }
+  }
 }

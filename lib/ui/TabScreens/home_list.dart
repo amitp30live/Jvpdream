@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:jvdream/blocs/location_bloc.dart';
-import 'package:jvdream/ui/initial_ui.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:jvdream/ui/base_ui.dart';
+import 'package:jvdream/utils/extension/common_widgets/common_style.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 class HomeListUI extends StatefulWidget {
@@ -15,7 +15,7 @@ class HomeListUI extends StatefulWidget {
   State<HomeListUI> createState() => _HomeListUIState();
 }
 
-class _HomeListUIState extends State<HomeListUI> {
+class _HomeListUIState extends BaseStatefulState<HomeListUI> {
   String address = "";
   var dictAddressData = <String, String>{};
 
@@ -27,13 +27,30 @@ class _HomeListUIState extends State<HomeListUI> {
     getPosition();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    contextMain = context;
+    return Scaffold(body: Container()
+
+        /*FutureBuilder(
+        future: locationBloc.streamNearByInfo.first,
+        builder: (context, snapshot) {
+          if (snapshot.data) {
+        } 
+
+        },
+      ),
+      */
+        );
+  }
+
   datacall() async {
     var latlong = await _determinePosition();
     setAddressData(latlong);
   }
 
   _listenBlocData() {
-    locationBloc.streamUserInfo.listen((response) {
+    locationBloc.streamLocationInfo.listen((response) {
       if (response.status == 200) {
         // setState(() {
         //   isApiCallInProgress = false;
@@ -44,6 +61,20 @@ class _HomeListUIState extends State<HomeListUI> {
         // setState(() {
         //   isApiCallInProgress = false;
         // });
+      }
+    });
+
+    locationBloc.streamNearByInfo.listen((response) {
+      if (response.status == 200) {
+        setState(() {
+          isApiCallInProgress = false;
+        });
+      } else {
+        print("Something went wronnggggg---");
+        SnackbarClass.createSnackBar(response.message, contextMain);
+        setState(() {
+          isApiCallInProgress = false;
+        });
       }
     });
   }
@@ -75,7 +106,12 @@ class _HomeListUIState extends State<HomeListUI> {
     dictAddressData["longitude"] = "${position.longitude}";
 
     print(addressC);
-    await locationBloc.addLocationDetails(dictAddressData);
+    locationBloc.addLocationDetails(dictAddressData);
+
+    Map<String, String> dict = {};
+    dict["latitude"] = "${position.latitude}";
+    dict["longitude"] = "${position.longitude}";
+    locationBloc.nearByLocationListDetails(dict);
     /*
   flutter: {name: New SG Road, street: New SG Road, isoCountryCode: IN, country: India,
    postalCode: 382481, administrativeArea: GJ, subAdministrativeArea: Ahmedabad, 
@@ -106,13 +142,8 @@ contactObj:63b83e2458108e5704758ebd
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
+/*
+Column(
             children: [
               Text(address.isEmpty
                   ? "Show Address"
@@ -124,10 +155,7 @@ contactObj:63b83e2458108e5704758ebd
                   child: Text("Logout"))
             ],
           ),
-        ),
-      ),
-    );
-  }
+*/
 
   /// Determine the current position of the device.
   ///
@@ -196,17 +224,5 @@ contactObj:63b83e2458108e5704758ebd
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
     return placemarks;
-  }
-
-  void _doOpenPage(BuildContext contextMain) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    await preferences.remove('user');
-
-    // Navigator.of(context, rootNavigator: true).pop().;
-
-    Navigator.pushAndRemoveUntil(contextMain,
-        MaterialPageRoute(builder: (context) {
-      return InitialUI();
-    }), ModalRoute.withName('/'));
   }
 }

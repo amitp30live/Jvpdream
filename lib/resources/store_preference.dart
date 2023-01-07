@@ -65,6 +65,13 @@ class Auth with StorePreferneceData {
         status: 404,
         locationModel: LocationModel.dummy());
   }
+
+  NearbyLocationResponse dummyNearByLocationResponse() {
+    return NearbyLocationResponse(
+        message: "No internet Connection",
+        status: 404,
+        listLocations: NearbyLocationList.dummy());
+  }
 }
 
 Auth auth = Auth();

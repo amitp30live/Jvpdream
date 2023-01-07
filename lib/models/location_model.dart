@@ -1,7 +1,21 @@
-import 'dart:ffi';
-
 import 'package:jvdream/models/base_response.dart';
 import 'package:jvdream/models/user_model.dart';
+
+class NearbyLocationList {
+  late List<LocationModel> listLocationData;
+
+  NearbyLocationList.fromJson(List<dynamic> parsedJson) {
+    List<LocationModel> listData = [];
+    for (int i = 0; i < parsedJson.length; i++) {
+      listData.add(LocationModel.fromJson(parsedJson[i]));
+    }
+    listLocationData = listData;
+  }
+
+  NearbyLocationList.dummy() {
+    listLocationData = [];
+  }
+}
 
 class LocationModel {
   late UserModel userModel;
@@ -51,6 +65,15 @@ class LocationResponse extends BaseDataRes {
 
   LocationResponse(
       {required this.locationModel,
+      required super.status,
+      required super.message});
+}
+
+class NearbyLocationResponse extends BaseDataRes {
+  NearbyLocationList listLocations;
+
+  NearbyLocationResponse(
+      {required this.listLocations,
       required super.status,
       required super.message});
 }

@@ -40,4 +40,20 @@ class LocationRepository {
           locationDData, ApiURLS.addLocationDetailsURL, headerparams);
     }
   }
+
+  Future<NearbyLocationResponse?> nearbyLocationListDetails(
+      Map<String, String> locationData) async {
+    /*authorization:bearer eyJhbGc
+    */
+
+    UserModel? model = await auth.loggedUser();
+    if (model != null) {
+      var headerparams = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'authorization': 'bearer ${model.accessToken}'
+      };
+      return authApiProvider.nearByLocationData(
+          locationData, ApiURLS.getNearbyLocationsURL, headerparams);
+    }
+  }
 }

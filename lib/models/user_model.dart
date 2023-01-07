@@ -1,8 +1,4 @@
-import 'dart:developer';
-
 import 'package:jvdream/models/base_response.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class UserModel {
   /*
