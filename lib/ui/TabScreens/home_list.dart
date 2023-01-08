@@ -24,14 +24,14 @@ class _HomeListUIState extends BaseStatefulState<HomeListUI> {
   void initState() {
     super.initState();
     // datacall();
-    _listenBlocData();
+    // _listenBlocData();
   }
 
   @override
   Widget build(BuildContext context) {
     contextMain = context;
-    // return Scaffold(body: asyncAPICallBindFutureList());
-    return Scaffold(body: normlList());
+    return Scaffold(body: asyncAPICallBindFutureList());
+    // return Scaffold(body: normlList());
   }
 
   Widget normlList() {
@@ -78,11 +78,11 @@ class _HomeListUIState extends BaseStatefulState<HomeListUI> {
     var latlong = await _determinePosition();
     //SetData for nearby location
     // setAddressData(latlong);
-    isApiCallInProgress = true;
+    //isApiCallInProgress = true;
     Map<String, String> dict = {};
     dict["latitude"] = "${latlong.latitude}";
     dict["longitude"] = "${latlong.longitude}";
-    await locationBloc.nearByLocationListDetails(dict);
+    return await locationBloc.nearByLocationListDetails(dict);
     // .then((data) => {print("WOOOO-data$data")
     // arrNearbylist = data;
     // });
