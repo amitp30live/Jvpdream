@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:jvdream/blocs/location_bloc.dart';
+import 'package:jvdream/models/location_model.dart';
 import 'package:jvdream/ui/base_ui.dart';
 import 'package:jvdream/utils/extension/common_widgets/common_style.dart';
 
@@ -18,36 +19,73 @@ class HomeListUI extends StatefulWidget {
 class _HomeListUIState extends BaseStatefulState<HomeListUI> {
   String address = "";
   var dictAddressData = <String, String>{};
-
+  List<LocationModel> nearbyLocationList = [];
   @override
   void initState() {
     super.initState();
-
-    datacall();
-    getPosition();
+    // datacall();
     _listenBlocData();
   }
 
   @override
   Widget build(BuildContext context) {
     contextMain = context;
-    return Scaffold(body: Container()
+    // return Scaffold(body: asyncAPICallBindFutureList());
+    return Scaffold(body: normlList());
+  }
 
-        /*FutureBuilder(
-        future: locationBloc.streamNearByInfo.first,
-        builder: (context, snapshot) {
-          if (snapshot.data) {
-        } 
+  Widget normlList() {
+    return isApiCallInProgress
+        ? Center(
+            child: CircularProgressIndicator(
+                backgroundColor: Theme.of(context).primaryColor),
+          )
+        : ListView.builder(
+            itemCount: nearbyLocationList.length,
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(nearbyLocationList[index].address!),
+            ),
+          );
+  }
 
-        },
-      ),
-      */
-        );
+  Widget asyncAPICallBindFutureList() {
+    return FutureBuilder(
+        future: datacall(),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                  itemCount: snapshot.data.length,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('${snapshot.data[index].address}'),
+                    );
+                  }),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        });
   }
 
   datacall() async {
     var latlong = await _determinePosition();
-    setAddressData(latlong);
+    //SetData for nearby location
+    // setAddressData(latlong);
+    isApiCallInProgress = true;
+    Map<String, String> dict = {};
+    dict["latitude"] = "${latlong.latitude}";
+    dict["longitude"] = "${latlong.longitude}";
+    await locationBloc.nearByLocationListDetails(dict);
+    // .then((data) => {print("WOOOO-data$data")
+    // arrNearbylist = data;
+    // });
   }
 
   _listenBlocData() {
@@ -67,8 +105,15 @@ class _HomeListUIState extends BaseStatefulState<HomeListUI> {
 
     locationBloc.streamNearByInfo.listen((response) {
       if (response.status == 200) {
+        var data = response.listLocations;
+
+        // arrNearbylist =futureList.map((e) => CartItemModel.fromJson(e)).toList();
+
+        // return convertedCart;
+
         setState(() {
           isApiCallInProgress = false;
+          nearbyLocationList = data.listLocationData;
         });
       } else {
         print("Something went wronnggggg---");
@@ -109,10 +154,10 @@ class _HomeListUIState extends BaseStatefulState<HomeListUI> {
     print(addressC);
     // locationBloc.addLocationDetails(dictAddressData);
 
-    Map<String, String> dict = {};
-    dict["latitude"] = "${position.latitude}";
-    dict["longitude"] = "${position.longitude}";
-    locationBloc.nearByLocationListDetails(dict);
+    // Map<String, String> dict = {};
+    // dict["latitude"] = "${position.latitude}";
+    // dict["longitude"] = "${position.longitude}";
+    // locationBloc.nearByLocationListDetails(dict);
     /*
   flutter: {name: New SG Road, street: New SG Road, isoCountryCode: IN, country: India,
    postalCode: 382481, administrativeArea: GJ, subAdministrativeArea: Ahmedabad, 

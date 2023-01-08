@@ -22,7 +22,8 @@ class LocationBloc {
   nearByLocationListDetails(Map<String, String> locationData) async {
     var data = await locRepo.nearbyLocationListDetails(locationData);
     if (data != null) {
-      return _nearBylocationFetcher.sink.add(data);
+      _nearBylocationFetcher.sink.add(data);
+      return data.listLocations.listLocationData;
     }
   }
 }
