@@ -24,6 +24,8 @@ class LocationModel {
   String? country;
   String? pincode;
   String? state;
+
+  String? distance;
   Coordinates? coordinates;
 
   LocationModel.fromJson(Map<String, dynamic> parsedJson) {
@@ -47,6 +49,11 @@ class LocationModel {
     city = parsedJson["city"];
     country = parsedJson["country"];
     pincode = parsedJson["pincode"].toString();
+
+    // var data = num.parse(parsedJson["distance"] / 1000);
+    // var distanceInKiloMeters = data.toStringAsFixed(2);
+    distance = "${parsedJson["distance"]} Km";
+
     state = parsedJson["state"];
     Map<String, dynamic> locationData = parsedJson["location"];
     if (locationData.length > 0) {

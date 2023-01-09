@@ -52,6 +52,8 @@ class LocationRepository {
         'Content-Type': 'application/x-www-form-urlencoded',
         'authorization': 'bearer ${model.accessToken}'
       };
+      var locationDData = locationData;
+      locationDData["contactObj"] = model.sid;
       return authApiProvider.nearByLocationData(
           locationData, ApiURLS.getNearbyLocationsURL, headerparams);
     }

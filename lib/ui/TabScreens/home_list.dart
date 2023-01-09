@@ -30,10 +30,32 @@ class _HomeListUIState extends BaseStatefulState<HomeListUI> {
   @override
   Widget build(BuildContext context) {
     contextMain = context;
-    return Scaffold(body: asyncAPICallBindFutureList());
+    return Scaffold(
+        body: FutureBuilder(
+            future: datacall(),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 8),
+                  child: ListView.builder(
+                      itemCount: snapshot.data.length,
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                            padding: const EdgeInsets.only(left: 8, right: 8),
+                            child: prepareRow(snapshot.data[index])
+                            //Text('${snapshot.data[index].address}'),
+                            );
+                      }),
+                );
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            }));
     // return Scaffold(body: normlList());
   }
 
+/*
   Widget normlList() {
     return isApiCallInProgress
         ? Center(
@@ -50,28 +72,105 @@ class _HomeListUIState extends BaseStatefulState<HomeListUI> {
             ),
           );
   }
-
+*/
+/*
+Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+        elevation: 0,
+        color: Colors.purple.shade100,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListTile(
+            leading: Image.network(item.image,height: 90,width: 90,),
+            title: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(child: Text(item.name,style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold,fontSize: 18))),
+            ),
+            subtitle: Center(child: Text(item.desc,style: TextStyle(color: Colors.indigo.shade500, fontWeight: FontWeight.bold,fontSize: 15))),
+            trailing: Text(
+              "\$${item.price}",
+              style: TextStyle(color: Colors.purple, fontWeight: FontWeight.bold,fontSize: 20),
+            ),
+          ),
+        ),
+      ),
+    );
+*/
   Widget asyncAPICallBindFutureList() {
     return FutureBuilder(
         future: datacall(),
         builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.hasData &&
+              (snapshot.connectionState == ConnectionState.done)) {
             return Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(left: 8, right: 8),
               child: ListView.builder(
                   itemCount: snapshot.data.length,
                   scrollDirection: Axis.vertical,
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('${snapshot.data[index].address}'),
-                    );
+                        padding: const EdgeInsets.only(left: 8, right: 8),
+                        child: prepareRow(snapshot.data[index])
+                        //Text('${snapshot.data[index].address}'),
+                        );
                   }),
             );
           } else {
             return Center(child: CircularProgressIndicator());
           }
         });
+  }
+
+  Widget prepareRow(LocationModel locationModel) {
+    return Column(
+      children: [
+        _eachRowWidget('Name: ',
+            '${locationModel.userModel.firstName} ${locationModel.userModel.lastName}',
+            textStyle: textStyleDataForHeader()),
+        Container(
+          height: 6,
+        ),
+        _eachRowWidget('Email: ', locationModel.userModel.email,
+            textStyle: textStyleDataForHeader()),
+        Container(
+          height: 6,
+        ),
+        _eachRowWidget('Address: ', locationModel.address),
+        Container(
+          height: 6,
+        ),
+        _eachRowWidget('Distance: ', 'Away : ${locationModel.distance}'),
+        Container(
+          height: 3,
+        ),
+        Divider()
+      ],
+    );
+  }
+
+  Widget _eachRowWidget(String title, String? displayValue,
+      {TextStyle textStyle = const TextStyle(fontWeight: FontWeight.normal)}) {
+    return Row(
+      children: [
+        // Container(
+        //   width: 100,
+        //   child: Text(
+        //     title,
+        //     style: TextStyle(fontWeight: FontWeight.bold),
+        //   ),
+        // ),
+        Expanded(
+            child: Text(
+          displayValue ?? "",
+          style: textStyle,
+        ))
+      ],
+    );
+  }
+
+  TextStyle textStyleDataForHeader() {
+    return TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
   }
 
   datacall() async {
