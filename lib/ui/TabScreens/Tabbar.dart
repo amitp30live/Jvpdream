@@ -22,9 +22,10 @@ class _TabbarPageState extends State<TabbarPage> {
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
-            title: const Text("Home"),
+            title: const Text("Nearby Users"),
             centerTitle: true,
             automaticallyImplyLeading: false,
+            backgroundColor: Colors.black87,
           ),
           body: CupertinoTabScaffold(
             tabBar: CupertinoTabBar(

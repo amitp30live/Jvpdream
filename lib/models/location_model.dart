@@ -50,9 +50,9 @@ class LocationModel {
     country = parsedJson["country"];
     pincode = parsedJson["pincode"].toString();
 
-    // var data = num.parse(parsedJson["distance"] / 1000);
-    // var distanceInKiloMeters = data.toStringAsFixed(2);
-    distance = "${parsedJson["distance"]} Km";
+    var data = parsedJson["distance"].toDouble() / 1000;
+    var distanceKM = data.toStringAsFixed(2);
+    distance = "$distanceKM Km";
 
     state = parsedJson["state"];
     Map<String, dynamic> locationData = parsedJson["location"];

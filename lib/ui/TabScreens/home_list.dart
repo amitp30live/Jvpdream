@@ -20,6 +20,7 @@ class _HomeListUIState extends BaseStatefulState<HomeListUI> {
   String address = "";
   var dictAddressData = <String, String>{};
   List<LocationModel> nearbyLocationList = [];
+
   @override
   void initState() {
     super.initState();
@@ -36,16 +37,17 @@ class _HomeListUIState extends BaseStatefulState<HomeListUI> {
             builder: (context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 return Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
+                  padding: const EdgeInsets.all(8),
                   child: ListView.builder(
                       itemCount: snapshot.data.length,
                       scrollDirection: Axis.vertical,
                       itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                            padding: const EdgeInsets.only(left: 8, right: 8),
-                            child: prepareRow(snapshot.data[index])
-                            //Text('${snapshot.data[index].address}'),
-                            );
+                        return Card(
+                          margin: const EdgeInsets.all(8),
+                          child: prepareRow(snapshot.data[index])
+                          //Text('${snapshot.data[index].address}'),
+                          ,
+                        );
                       }),
                 );
               } else {
@@ -123,29 +125,32 @@ Padding(
   }
 
   Widget prepareRow(LocationModel locationModel) {
-    return Column(
-      children: [
-        _eachRowWidget('Name: ',
-            '${locationModel.userModel.firstName} ${locationModel.userModel.lastName}',
-            textStyle: textStyleDataForHeader()),
-        Container(
-          height: 6,
-        ),
-        _eachRowWidget('Email: ', locationModel.userModel.email,
-            textStyle: textStyleDataForHeader()),
-        Container(
-          height: 6,
-        ),
-        _eachRowWidget('Address: ', locationModel.address),
-        Container(
-          height: 6,
-        ),
-        _eachRowWidget('Distance: ', 'Away : ${locationModel.distance}'),
-        Container(
-          height: 3,
-        ),
-        Divider()
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          _eachRowWidget('',
+              '${locationModel.userModel.firstName} ${locationModel.userModel.lastName}',
+              textStyle: textStyleDataForHeader()),
+          Container(
+            height: 6,
+          ),
+          _eachRowWidget('', locationModel.userModel.email,
+              textStyle: textStyleDataForHeader()),
+          Container(
+            height: 6,
+          ),
+          _eachRowWidget('', 'Away : ${locationModel.distance}',
+              textStyle: textStyleDataForHeader()),
+          Container(
+            height: 6,
+          ),
+          _eachRowWidget('Address: ', locationModel.address),
+          Container(
+            height: 6,
+          ),
+        ],
+      ),
     );
   }
 
@@ -153,13 +158,13 @@ Padding(
       {TextStyle textStyle = const TextStyle(fontWeight: FontWeight.normal)}) {
     return Row(
       children: [
-        // Container(
-        //   width: 100,
-        //   child: Text(
-        //     title,
-        //     style: TextStyle(fontWeight: FontWeight.bold),
-        //   ),
-        // ),
+        Container(
+          width: title == "" ? 0 : 100,
+          child: Text(
+            title,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
         Expanded(
             child: Text(
           displayValue ?? "",
@@ -181,6 +186,7 @@ Padding(
     Map<String, String> dict = {};
     dict["latitude"] = "${latlong.latitude}";
     dict["longitude"] = "${latlong.longitude}";
+
     return await locationBloc.nearByLocationListDetails(dict);
     // .then((data) => {print("WOOOO-data$data")
     // arrNearbylist = data;

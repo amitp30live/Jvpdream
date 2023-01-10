@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jvdream/resources/store_preference.dart';
 import 'package:jvdream/ui/initial_ui.dart';
@@ -19,6 +20,7 @@ class _SettingsUIState extends State<SettingsUI> with StorePreferneceData {
           child: Column(
             children: [
               Text("Settings"),
+              Spacer(),
               TextButton(
                   onPressed: () {
                     _doOpenPage(context);
@@ -35,9 +37,13 @@ class _SettingsUIState extends State<SettingsUI> with StorePreferneceData {
     removeUserFromPreference();
     // Navigator.of(context, rootNavigator: true).pop().;
 
-    Navigator.pushAndRemoveUntil(contextMain,
-        MaterialPageRoute(builder: (context) {
-      return InitialUI();
-    }), ModalRoute.withName('/'));
+    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+        CupertinoPageRoute(builder: (context) => InitialUI()),
+        (route) => false);
+
+    // Navigator.pushAndRemoveUntil(contextMain,
+    //     MaterialPageRoute(builder: (context) {
+    //   return InitialUI();
+    // }), ModalRoute.withName('/'));
   }
 }
