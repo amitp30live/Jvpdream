@@ -6,7 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:jvdream/blocs/location_bloc.dart';
 import 'package:jvdream/models/location_model.dart';
 import 'package:jvdream/ui/base/base_ui.dart';
-import 'package:jvdream/utils/extension/common_widgets/common_style.dart';
+import 'package:jvdream/utils/common_widgets/common_style.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 class HomeListUI extends StatefulWidget {

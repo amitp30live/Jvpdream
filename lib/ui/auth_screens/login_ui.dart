@@ -5,7 +5,7 @@ import 'package:jvdream/models/user_model.dart';
 import 'package:jvdream/ui/auth_screens/signup_ui.dart';
 import 'package:jvdream/ui/base/base_ui.dart';
 import 'package:jvdream/ui/tab_screens/tabbar.dart';
-import 'package:jvdream/utils/extension/common_widgets/common_style.dart';
+import 'package:jvdream/utils/common_widgets/common_style.dart';
 import 'package:jvdream/utils/extension/validation.dart';
 
 class LoginUI extends StatefulWidget {
