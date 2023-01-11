@@ -52,6 +52,16 @@ class CommonWidgets {
   static var screenHeight =
       (window.physicalSize.longestSide / window.devicePixelRatio);
 
+  static Text textWidget(String name, {double size = 17}) {
+    return Text(
+      name,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: size,
+      ),
+    );
+  }
+
   static Widget appIcon(double iconWidth) {
     return Center(
       child: SizedBox(

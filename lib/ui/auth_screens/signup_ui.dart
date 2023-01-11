@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:jvdream/ui/TabScreens/tabbar.dart';
 
 import 'package:flutter/material.dart';
 import 'package:jvdream/blocs/auth_bloc.dart';
 import 'package:jvdream/ui/base/base_ui.dart';
+import 'package:jvdream/ui/tab_screens/tabbar.dart';
 import 'package:jvdream/utils/extension/common_widgets/common_style.dart';
 import 'package:jvdream/utils/extension/validation.dart';
 import 'login_ui.dart';
