@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:jvdream/blocs/auth_bloc.dart';
 import 'package:jvdream/models/user_model.dart';
-import 'package:jvdream/ui/base_ui.dart';
-import 'package:jvdream/ui/signup_ui.dart';
+
 import 'package:jvdream/ui/TabScreens/tabbar.dart';
-import '../utils/extension/common_widgets/common_style.dart';
-import '../utils/extension/validation.dart';
+import 'package:jvdream/ui/auth_screens/signup_ui.dart';
+import 'package:jvdream/ui/base/base_ui.dart';
+import 'package:jvdream/utils/extension/common_widgets/common_style.dart';
+import 'package:jvdream/utils/extension/validation.dart';
 
 class LoginUI extends StatefulWidget {
   const LoginUI({super.key});

@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:jvdream/ui/initial_ui.dart';
+import 'package:jvdream/ui/auth_screens/initial_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeUI extends StatefulWidget {

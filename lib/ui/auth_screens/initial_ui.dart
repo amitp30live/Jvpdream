@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:jvdream/ui/base_ui.dart';
-import 'package:jvdream/ui/signup_ui.dart';
+import 'package:jvdream/ui/auth_screens/signup_ui.dart';
+
 import 'login_ui.dart';
 
 class InitialUI extends StatefulWidget {

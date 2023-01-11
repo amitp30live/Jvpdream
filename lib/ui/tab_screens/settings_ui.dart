@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jvdream/resources/store_preference.dart';
-import 'package:jvdream/ui/initial_ui.dart';
+import 'package:jvdream/ui/auth_screens/initial_ui.dart';
 
 class SettingsUI extends StatefulWidget {
   const SettingsUI({super.key});
