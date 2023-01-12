@@ -132,24 +132,34 @@ Padding(
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _eachRowWidget('',
-              '${locationModel.userModel.firstName} ${locationModel.userModel.lastName}',
-              textStyle: textStyleDataForHeader()),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CommonWidgets.textWidget(
+                '${locationModel.userModel.firstName} ${locationModel.userModel.lastName}',
+              ),
+              CommonWidgets.textWidget(
+                'Away: ${locationModel.distance}',
+                weight: FontWeight.normal,
+              )
+            ],
+          ),
+          Container(
+            height: 8,
+          ),
+          CommonWidgets.textWidget(
+            'Email: ${locationModel.userModel.email}',
+          ),
           Container(
             height: 6,
           ),
-          _eachRowWidget('', locationModel.userModel.email,
-              textStyle: textStyleDataForHeader()),
-          Container(
-            height: 6,
+          CommonWidgets.textWidget(
+            'Address: ${locationModel.address}',
+            weight: FontWeight.normal,
+            size: 15,
           ),
-          _eachRowWidget('', 'Away : ${locationModel.distance}',
-              textStyle: textStyleDataForHeader()),
-          Container(
-            height: 6,
-          ),
-          _eachRowWidget('Address: ', locationModel.address),
           Container(
             height: 6,
           ),

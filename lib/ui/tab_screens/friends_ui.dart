@@ -12,7 +12,7 @@ class _FriendsUIState extends State<FriendsUI> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Friends.."),
+        title: Text("Friends"),
         backgroundColor: Colors.black,
       ),
       body: Container(
