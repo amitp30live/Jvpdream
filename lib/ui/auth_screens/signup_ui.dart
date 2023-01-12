@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:jvdream/blocs/auth_bloc.dart';
+import 'package:jvdream/resources/store_preference.dart';
 import 'package:jvdream/ui/base/base_ui.dart';
 import 'package:jvdream/ui/tab_screens/tabbar.dart';
 import 'package:jvdream/utils/common_widgets/common_style.dart';
@@ -269,6 +270,7 @@ password2:amit@1234
         // phoneNoController.clear();
         setState(() {
           isApiCallInProgress = false;
+          Auth().isLoggedUser();
           SnackbarClass.createSnackBar(
               "Created account successfully..", contextMain);
           Navigator.pushAndRemoveUntil(contextMain,

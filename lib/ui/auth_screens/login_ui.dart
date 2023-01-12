@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jvdream/blocs/auth_bloc.dart';
 import 'package:jvdream/models/user_model.dart';
+import 'package:jvdream/resources/store_preference.dart';
 
 import 'package:jvdream/ui/auth_screens/signup_ui.dart';
 import 'package:jvdream/ui/base/base_ui.dart';
@@ -239,7 +240,7 @@ class _LoginUIState extends BaseStatefulState<LoginUI> with ValidationMixin {
       if (response.status == 200) {
         setState(() {
           isApiCallInProgress = false;
-
+          Auth().isLoggedUser();
           Navigator.pushAndRemoveUntil(contextMain,
               MaterialPageRoute(builder: (context) {
             return TabbarPage();

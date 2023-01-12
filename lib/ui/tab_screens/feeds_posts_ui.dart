@@ -14,11 +14,13 @@ class PostsUI extends StatefulWidget {
 class _PostsUIState extends State<PostsUI> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Container(
-          child: Center(child: Text("Posts")),
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Feed"),
+        backgroundColor: Colors.black,
+      ),
+      body: Container(
+        child: Center(child: Text("Posts")),
       ),
     );
   }

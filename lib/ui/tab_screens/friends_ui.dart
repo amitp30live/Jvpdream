@@ -10,8 +10,14 @@ class FriendsUI extends StatefulWidget {
 class _FriendsUIState extends State<FriendsUI> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(child: Text("Friends")),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Friends"),
+        backgroundColor: Colors.black,
+      ),
+      body: Container(
+        child: Center(child: Text("Friends")),
+      ),
     );
   }
 }

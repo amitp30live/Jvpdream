@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:jvdream/ui/TabScreens/home_list.dart';
+import 'package:jvdream/ui/tab_screens/home_list.dart';
 import 'package:jvdream/ui/tab_screens/feeds_posts_ui.dart';
 import 'package:jvdream/ui/tab_screens/friends_ui.dart';
 import 'package:jvdream/ui/tab_screens/settings_ui.dart';
@@ -21,44 +21,39 @@ class _TabbarPageState extends State<TabbarPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-          appBar: AppBar(
-            title: const Text("Nearby Users"),
-            centerTitle: true,
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.black87,
-          ),
           body: CupertinoTabScaffold(
-            tabBar: CupertinoTabBar(
-              backgroundColor: Colors.black,
-              activeColor: Colors.white,
-              inactiveColor: Colors.grey,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  // label: 'Home',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.feed),
-                  // label: 'Feeds',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.contacts),
-                  // label: 'Friends',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.person),
-                  // label: "Profile",
-                ),
-              ],
+        resizeToAvoidBottomInset: false,
+        tabBar: CupertinoTabBar(
+          backgroundColor: Colors.black,
+          activeColor: Colors.white,
+          inactiveColor: Colors.grey,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
             ),
-            tabBuilder: (context, index) {
-              return CupertinoTabView(
-                builder: (context) {
-                  return data[index];
-                },
-              );
+            BottomNavigationBarItem(
+              icon: Icon(Icons.feed),
+              label: 'Feeds',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_box),
+              label: 'Friends',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.settings),
+              label: "Settings",
+            ),
+          ],
+        ),
+        tabBuilder: (context, index) {
+          return CupertinoTabView(
+            builder: (context) {
+              return data[index];
             },
-          )),
+          );
+        },
+      )),
     );
   }
 }

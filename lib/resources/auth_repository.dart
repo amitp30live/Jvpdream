@@ -23,39 +23,36 @@ class AuthRepository {
 class LocationRepository {
   final authApiProvider = AuthApiProvider();
 
-  Future<LocationResponse?> addLocationDetails(
+  Future<LocationResponse> addLocationDetails(
       Map<String, String> locationData) async {
     /*authorization:bearer eyJhbGc
     */
 
-    UserModel? model = await auth.loggedUser();
-    if (model != null) {
-      var headerparams = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'authorization': 'bearer ${model.accessToken}'
-      };
-      var locationDData = locationData;
-      locationDData["contactObj"] = model.sid;
-      return authApiProvider.addLocationData(
-          locationDData, ApiURLS.addLocationDetailsURL, headerparams);
-    }
+    var headerparams = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'authorization': 'bearer ${Auth.authUser.accessToken}'
+    };
+    var locationDData = locationData;
+    locationDData["contactObj"] = Auth.authUser.sid;
+    return authApiProvider.addLocationData(
+        locationDData, ApiURLS.addLocationDetailsURL, headerparams);
   }
 
-  Future<NearbyLocationResponse?> nearbyLocationListDetails(
+  Future<NearbyLocationResponse> nearbyLocationListDetails(
       Map<String, String> locationData) async {
     /*authorization:bearer eyJhbGc
     */
 
-    UserModel? model = await auth.loggedUser();
-    if (model != null) {
-      var headerparams = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'authorization': 'bearer ${model.accessToken}'
-      };
-      var locationDData = locationData;
-      locationDData["contactObj"] = model.sid;
-      return authApiProvider.nearByLocationData(
-          locationData, ApiURLS.getNearbyLocationsURL, headerparams);
-    }
+    //  UserModel? model = await auth.loggedUser();
+    // if (model != null) {
+    var headerparams = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'authorization': 'bearer ${Auth.authUser.accessToken}'
+    };
+    var locationDData = locationData;
+    locationDData["contactObj"] = Auth.authUser.sid;
+    return authApiProvider.nearByLocationData(
+        locationData, ApiURLS.getNearbyLocationsURL, headerparams);
+    // }
   }
 }

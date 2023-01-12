@@ -6,6 +6,17 @@ class CommonStyle {
     return const TextStyle(
         color: Colors.white, backgroundColor: Colors.black45, fontSize: 17);
   }
+
+  static TextStyle commonStyle(
+      {double size = 17,
+      FontWeight weight = FontWeight.bold,
+      Color textColor = Colors.black}) {
+    return TextStyle(
+      fontWeight: weight,
+      fontSize: size,
+      color: textColor,
+    );
+  }
 }
 
 class SnackbarClass {
@@ -52,11 +63,14 @@ class CommonWidgets {
   static var screenHeight =
       (window.physicalSize.longestSide / window.devicePixelRatio);
 
-  static Text textWidget(String name, {double size = 17}) {
+  static Text textWidget(String name,
+      {double size = 17,
+      FontWeight weight = FontWeight.bold,
+      Color hv = Colors.black}) {
     return Text(
       name,
       style: TextStyle(
-        fontWeight: FontWeight.bold,
+        fontWeight: weight,
         fontSize: size,
       ),
     );

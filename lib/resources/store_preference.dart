@@ -36,9 +36,12 @@ mixin StorePreferneceData {
 }
 
 class Auth with StorePreferneceData {
+  static late UserModel authUser;
+
   Future<bool> isLoggedUser() async {
     UserModel? user = await getUserFromPreference();
     if (user != null) {
+      authUser = user;
       return true;
     }
     return false;
@@ -47,6 +50,8 @@ class Auth with StorePreferneceData {
   Future<UserModel?> loggedUser() async {
     UserModel? user = await getUserFromPreference();
     if (user != null) {
+      authUser = user;
+
       return user;
     }
     return null;

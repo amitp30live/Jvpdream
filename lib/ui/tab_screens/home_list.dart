@@ -32,6 +32,10 @@ class _HomeListUIState extends BaseStatefulState<HomeListUI> {
   Widget build(BuildContext context) {
     contextMain = context;
     return Scaffold(
+        appBar: AppBar(
+          title: Text("Home"),
+          backgroundColor: Colors.black,
+        ),
         body: FutureBuilder(
             future: datacall(),
             builder: (context, AsyncSnapshot snapshot) {
