@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:jvdream/models/friend_model.dart';
 import 'package:jvdream/models/location_model.dart';
 import 'package:jvdream/models/user_model.dart';
 import 'package:jvdream/resources/api_urls.dart';
 import 'package:jvdream/resources/auth_api_provider.dart';
+import 'package:jvdream/resources/friends_api_provider.dart';
 import 'package:jvdream/resources/store_preference.dart';
 
 class AuthRepository {
@@ -54,5 +56,23 @@ class LocationRepository {
     return authApiProvider.nearByLocationData(
         locationData, ApiURLS.getNearbyLocationsURL, headerparams);
     // }
+  }
+}
+
+class FriendsRepository {
+  final friendApiProvider = FriendsApiProvider();
+
+  Future<FriendDataResponse> getFriendStatusDetails(
+      Map<String, String> reqData) async {
+    /*authorization:bearer eyJhbGc
+    */
+
+    var headerparams = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'authorization': 'bearer ${Auth.authUser.accessToken}'
+    };
+
+    return friendApiProvider.getCurrentStatus(
+        reqData, ApiURLS.getFriendStatusURL, headerparams);
   }
 }

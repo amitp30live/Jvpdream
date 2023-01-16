@@ -1,28 +1,52 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:developer';
+
+import 'package:jvdream/blocs/friendshp_bloc.dart';
 import 'package:jvdream/models/user_model.dart';
 import 'package:jvdream/resources/store_preference.dart';
 import 'package:jvdream/ui/base/base_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:jvdream/utils/common_widgets/common_style.dart';
 
+// ignore: must_be_immutable
 class OtherUserProfile extends StatefulWidget {
-  const OtherUserProfile({super.key});
+  OtherUserProfile({super.key, @required otherUser});
+  late UserModel otherUser;
 
   @override
   State<OtherUserProfile> createState() => _OtherUserProfileState();
 }
 
 class _OtherUserProfileState extends BaseStatefulState<OtherUserProfile> {
-  bool isFriend = false;
   //Show Send request button if isFriend = false
-  //Show Remove friend button if isFriend = false
+  //Show Remove friend button if isFriend = true
+  var currentStatus = "";
+  //Show Cancel request button if isSendRequest = true
+  //Show Cancel request button if isSendRequest = true
+  // late UserModel otherUser;
 
-  bool isSendRequest = false;
-  //Show Cancel request button if isSendRequest = false
-
-  bool receivedRequest = false;
   //Show Accept/Decline buttons if receivedRequest = false
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    listenData();
+  }
+
+  apiCall() {
+    var dict = <String, String>{};
+    dict["requesterId"] = Auth.authUser.sid;
+    dict["recipientId"] = widget.otherUser.sid;
+    friendshpBloc.getFriendStatus(dict);
+  }
+
+  listenData() {
+    friendshpBloc.streamFrndStatusInfo.listen((event) {
+      print(event);
+      log(event.reqStatus);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +68,7 @@ class _OtherUserProfileState extends BaseStatefulState<OtherUserProfile> {
                   Container(
                     width: 8,
                   ),
-                  columnNameDetails(Auth.authUser),
+                  columnNameDetails(widget.otherUser),
                 ]),
             Container(
               height: 18,

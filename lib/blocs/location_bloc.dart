@@ -1,5 +1,5 @@
 import 'package:jvdream/models/location_model.dart';
-import 'package:jvdream/resources/auth_repository.dart';
+import 'package:jvdream/resources/repository.dart';
 import 'package:rxdart/subjects.dart';
 
 class LocationBloc {
@@ -15,7 +15,8 @@ class LocationBloc {
   addLocationDetails(Map<String, String> locationData) async {
     var data = await locRepo.addLocationDetails(locationData);
     if (data != null) {
-      return _locationFetcher.sink.add(data);
+      print("Add location response - $data");
+      // return _locationFetcher.sink.add(data);
     }
   }
 

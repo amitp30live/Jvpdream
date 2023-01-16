@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:jvdream/blocs/location_bloc.dart';
 import 'package:jvdream/models/location_model.dart';
 import 'package:jvdream/ui/base/base_ui.dart';
+import 'package:jvdream/ui/screens/otherprofile.dart';
 import 'package:jvdream/utils/common_widgets/common_style.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
@@ -26,6 +27,7 @@ class _HomeListUIState extends BaseStatefulState<HomeListUI> {
     super.initState();
     // datacall();
     // _listenBlocData();
+    // getPosition();
   }
 
   @override
@@ -41,13 +43,13 @@ class _HomeListUIState extends BaseStatefulState<HomeListUI> {
             builder: (context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 return Padding(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.only(left: 8, right: 8),
                   child: ListView.builder(
                       itemCount: snapshot.data.length,
                       scrollDirection: Axis.vertical,
                       itemBuilder: (BuildContext context, int index) {
                         return Card(
-                          margin: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.all(10),
                           child: prepareRow(snapshot.data[index])
                           //Text('${snapshot.data[index].address}'),
                           ,
@@ -116,10 +118,9 @@ Padding(
                   scrollDirection: Axis.vertical,
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
-                        padding: const EdgeInsets.only(left: 8, right: 8),
-                        child: prepareRow(snapshot.data[index])
-                        //Text('${snapshot.data[index].address}'),
-                        );
+                      padding: const EdgeInsets.all(8.0),
+                      child: prepareRow(snapshot.data[index]),
+                    );
                   }),
             );
           } else {
@@ -129,41 +130,51 @@ Padding(
   }
 
   Widget prepareRow(LocationModel locationModel) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CommonWidgets.textWidget(
-                '${locationModel.userModel.firstName} ${locationModel.userModel.lastName}',
-              ),
-              CommonWidgets.textWidget(
-                'Away: ${locationModel.distance}',
-                weight: FontWeight.normal,
-              )
-            ],
-          ),
-          Container(
-            height: 8,
-          ),
-          CommonWidgets.textWidget(
-            'Email: ${locationModel.userModel.email}',
-          ),
-          Container(
-            height: 6,
-          ),
-          CommonWidgets.textWidget(
-            'Address: ${locationModel.address}',
-            weight: FontWeight.normal,
-            size: 15,
-          ),
-          Container(
-            height: 6,
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    OtherUserProfile(otherUser: locationModel.userModel)));
+        print("Column clicked");
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CommonWidgets.textWidget(
+                  '${locationModel.userModel.firstName} ${locationModel.userModel.lastName}',
+                ),
+                CommonWidgets.textWidget(
+                  'Away: ${locationModel.distance}',
+                  weight: FontWeight.normal,
+                )
+              ],
+            ),
+            Container(
+              height: 8,
+            ),
+            CommonWidgets.textWidget(
+              'Email: ${locationModel.userModel.email}',
+            ),
+            Container(
+              height: 6,
+            ),
+            CommonWidgets.textWidget(
+              'Address: ${locationModel.address}',
+              weight: FontWeight.normal,
+              size: 15,
+            ),
+            Container(
+              height: 6,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -302,9 +313,9 @@ contactObj:63b83e2458108e5704758ebd
         'thoroughfare': thoroughfare,
         'subThoroughfare': subThoroughfare,
     */
-    setState(() {
-      address = addressC; // update _address
-    });
+    // setState(() {
+    //   address = addressC; // update _address
+    // });
   }
 
 /*

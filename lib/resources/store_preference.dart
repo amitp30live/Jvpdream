@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:jvdream/models/base_response.dart';
+import 'package:jvdream/models/friend_model.dart';
 import 'package:jvdream/models/location_model.dart';
 import 'package:jvdream/models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -76,6 +77,14 @@ class Auth with StorePreferneceData {
         message: "No internet Connection",
         status: 404,
         listLocations: NearbyLocationList.dummy());
+  }
+
+  FriendDataResponse dummyFriendReqResponse() {
+    return FriendDataResponse(
+      reqStatus: "",
+      message: "No internet Connection",
+      status: 404,
+    );
   }
 }
 

@@ -1,4 +1,5 @@
 import 'package:jvdream/models/base_response.dart';
+import 'package:jvdream/models/friend_model.dart';
 import 'package:jvdream/models/user_model.dart';
 
 class NearbyLocationList {
@@ -99,6 +100,7 @@ class NearbyLocationResponse extends BaseDataRes {
       required super.status,
       required super.message});
 }
+
 /*
  "data": {
         "location": {
