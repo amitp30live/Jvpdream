@@ -11,33 +11,28 @@ import 'package:jvdream/utils/common_widgets/common_style.dart';
 
 // ignore: must_be_immutable
 class OtherUserProfile extends StatefulWidget {
-  OtherUserProfile({super.key, @required otherUser});
-  late UserModel otherUser;
+  UserModel otherUser;
+
+  OtherUserProfile({super.key, required this.otherUser});
 
   @override
   State<OtherUserProfile> createState() => _OtherUserProfileState();
 }
 
 class _OtherUserProfileState extends BaseStatefulState<OtherUserProfile> {
-  //Show Send request button if isFriend = false
-  //Show Remove friend button if isFriend = true
   var currentStatus = "";
-  //Show Cancel request button if isSendRequest = true
-  //Show Cancel request button if isSendRequest = true
-  // late UserModel otherUser;
-
-  //Show Accept/Decline buttons if receivedRequest = false
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    contextMain = context;
     listenData();
+    apiCall();
   }
 
   apiCall() {
     var dict = <String, String>{};
-    dict["requesterId"] = Auth.authUser.sid;
-    dict["recipientId"] = widget.otherUser.sid;
+    dict["userId"] = Auth.authUser.sid;
+    dict["otherUserId"] = widget.otherUser.sid;
     friendshpBloc.getFriendStatus(dict);
   }
 
@@ -45,6 +40,11 @@ class _OtherUserProfileState extends BaseStatefulState<OtherUserProfile> {
     friendshpBloc.streamFrndStatusInfo.listen((event) {
       print(event);
       log(event.reqStatus);
+      if (mounted) {
+        setState(() {
+          currentStatus = event.reqStatus.toLowerCase();
+        });
+      }
     });
   }
 
@@ -54,7 +54,8 @@ class _OtherUserProfileState extends BaseStatefulState<OtherUserProfile> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Profile"),
+          leading: BackButton(onPressed: _onBackPressed),
+          title: Text('Profile'),
           backgroundColor: Colors.black,
         ),
         body: Padding(
@@ -93,26 +94,86 @@ class _OtherUserProfileState extends BaseStatefulState<OtherUserProfile> {
           Container(
             height: 4,
           ),
-          CommonWidgets.textWidget("Mob no: ${user.phoneNo}",
-              weight: FontWeight.normal),
-          Container(
-            height: 4,
-          ),
           CommonWidgets.textWidget("Email: ${user.email}",
               weight: FontWeight.normal),
           Container(
             height: 4,
           ),
-          TextButton(
-            onPressed: () {
-              //Update UI and Send request
-            },
-            child: Text("Send Request"),
-          )
+          showButtonsAsPerCurrentStatus(),
           // TextButton Text("Send Request"))
         ],
       ),
     );
+  }
+
+  Widget showButtonsAsPerCurrentStatus() {
+    if (currentStatus == "notfriends") {
+      return Row(children: [
+        ElevatedButton(
+          onPressed: () {
+            //Update UI and Send request
+            print("tapped on send friend request ");
+          },
+          style: getStyle(),
+          child: Text("Send Request"),
+        ),
+      ]);
+    } else if (currentStatus == "waitorcancelrequest") {
+      return Row(children: [
+        ElevatedButton(
+          onPressed: () {
+            //Update UI and Send request
+            print("tapped on cancel friend request ");
+          },
+          style: getStyle(),
+          child: Text("Cancel Request"),
+        ),
+      ]);
+    } else if (currentStatus == "friends") {
+      return Row(children: [
+        ElevatedButton(
+          onPressed: () {
+            //Update UI and Send request
+            print("tapped on remove friend");
+          },
+          style: getStyle(),
+          child: Text("Remove Friend"),
+        ),
+      ]);
+    } else if (currentStatus == "respondtorequest") {
+      return Row(children: [
+        ElevatedButton(
+          onPressed: () {
+            //Update UI and Send request
+            print("Accept request");
+          },
+          style: getStyle(),
+          child: Text("Accept"),
+        ),
+        Container(
+          width: 5,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            //Update UI and Send request
+            print("Decline request");
+          },
+          style: getStyle(),
+          child: Text("Decline"),
+        ),
+      ]);
+    }
+    return Text("...");
+  }
+
+  ButtonStyle getStyle() {
+    return ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.black), // background
+        // foregroundColor: MaterialStateProperty.all(Colors.yellow), // foreground
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(color: Colors.white))));
   }
 
   Widget imgProfile() {
@@ -159,5 +220,9 @@ class _OtherUserProfileState extends BaseStatefulState<OtherUserProfile> {
         return alert;
       },
     );
+  }
+
+  void _onBackPressed() {
+    Navigator.of(contextMain).pop();
   }
 }

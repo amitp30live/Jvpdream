@@ -23,7 +23,10 @@ class FriendsApiProvider with CheckInternetConnection, StorePreferneceData {
 
     if (response.statusCode == 200) {
       var jsonData = json.decode(response.body);
-      FriendModel amodel = FriendModel.fromJson(jsonData["data"]);
+      FriendModel? amodel;
+      if (jsonData["data"] != null) {
+        amodel = FriendModel.fromJson(jsonData["data"]);
+      }
       FriendDataResponse loginResp = FriendDataResponse(
           reqStatus: jsonData["status"],
           message: jsonData["message"],

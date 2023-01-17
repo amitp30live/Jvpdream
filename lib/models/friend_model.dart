@@ -37,7 +37,7 @@ class FriendDataResponse extends BaseDataRes {
   late String reqStatus;
   FriendModel? friendModel;
   FriendDataResponse(
-      {required reqStatus,
+      {required this.reqStatus,
       friendModel,
       required super.status,
       required super.message});
