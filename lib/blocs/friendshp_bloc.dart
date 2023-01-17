@@ -19,6 +19,13 @@ class FriendshpBloc {
     _frndFetcher.sink.add(data);
     return data;
   }
+
+  asPerActionPassUrl(Map<String, String> reqData, String url) async {
+    var data = await frndRepo.doAsPerRequested(reqData, url);
+    print("Add location response - $data");
+    _frndFetcher.sink.add(data);
+    return data;
+  }
 }
 
 final friendshpBloc = FriendshpBloc();

@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors
-
 import 'dart:developer';
-
 import 'package:jvdream/blocs/friendshp_bloc.dart';
+import 'package:jvdream/models/location_model.dart';
 import 'package:jvdream/models/user_model.dart';
+import 'package:jvdream/resources/api_urls.dart';
 import 'package:jvdream/resources/store_preference.dart';
 import 'package:jvdream/ui/base/base_ui.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +12,9 @@ import 'package:jvdream/utils/common_widgets/common_style.dart';
 // ignore: must_be_immutable
 class OtherUserProfile extends StatefulWidget {
   UserModel otherUser;
+  LocationModel? locationModel;
 
-  OtherUserProfile({super.key, required this.otherUser});
+  OtherUserProfile({super.key, required this.otherUser, this.locationModel});
 
   @override
   State<OtherUserProfile> createState() => _OtherUserProfileState();
@@ -59,8 +60,11 @@ class _OtherUserProfileState extends BaseStatefulState<OtherUserProfile> {
           backgroundColor: Colors.black,
         ),
         body: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.only(left: 10, right: 10),
           child: ListView(padding: EdgeInsets.zero, children: [
+            Container(
+              height: 8,
+            ),
             Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,6 +78,7 @@ class _OtherUserProfileState extends BaseStatefulState<OtherUserProfile> {
             Container(
               height: 18,
             ),
+            _showLocationfield(),
           ]),
         ),
       ),
@@ -106,6 +111,31 @@ class _OtherUserProfileState extends BaseStatefulState<OtherUserProfile> {
     );
   }
 
+  Widget _showLocationfield() {
+    if (widget.locationModel != null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CommonWidgets.textWidget(
+            'Away: ${widget.locationModel!.distance}',
+            weight: FontWeight.normal,
+          ),
+          Container(
+            height: 8,
+          ),
+          CommonWidgets.textWidget(
+            'Address: ${widget.locationModel!.address}',
+            weight: FontWeight.normal,
+            size: 15,
+          ),
+        ],
+      );
+    }
+    return Container(
+      height: 2,
+    );
+  }
+
   Widget showButtonsAsPerCurrentStatus() {
     if (currentStatus == "notfriends") {
       return Row(children: [
@@ -113,6 +143,7 @@ class _OtherUserProfileState extends BaseStatefulState<OtherUserProfile> {
           onPressed: () {
             //Update UI and Send request
             print("tapped on send friend request ");
+            apiCallForAction("SendRequest");
           },
           style: getStyle(),
           child: Text("Send Request"),
@@ -124,6 +155,7 @@ class _OtherUserProfileState extends BaseStatefulState<OtherUserProfile> {
           onPressed: () {
             //Update UI and Send request
             print("tapped on cancel friend request ");
+            apiCallForAction("CancelRequest");
           },
           style: getStyle(),
           child: Text("Cancel Request"),
@@ -135,6 +167,7 @@ class _OtherUserProfileState extends BaseStatefulState<OtherUserProfile> {
           onPressed: () {
             //Update UI and Send request
             print("tapped on remove friend");
+            apiCallForAction("RemoveFriend");
           },
           style: getStyle(),
           child: Text("Remove Friend"),
@@ -146,6 +179,7 @@ class _OtherUserProfileState extends BaseStatefulState<OtherUserProfile> {
           onPressed: () {
             //Update UI and Send request
             print("Accept request");
+            apiCallForAction("Accept");
           },
           style: getStyle(),
           child: Text("Accept"),
@@ -157,6 +191,7 @@ class _OtherUserProfileState extends BaseStatefulState<OtherUserProfile> {
           onPressed: () {
             //Update UI and Send request
             print("Decline request");
+            apiCallForAction("Decline");
           },
           style: getStyle(),
           child: Text("Decline"),
@@ -164,6 +199,27 @@ class _OtherUserProfileState extends BaseStatefulState<OtherUserProfile> {
       ]);
     }
     return Text("...");
+  }
+
+  apiCallForAction(String action) {
+    var dict = <String, String>{};
+    dict["userId"] = Auth.authUser.sid;
+    dict["otherUserId"] = widget.otherUser.sid;
+
+    var url = "";
+    if (action == "SendRequest") {
+      url = ApiURLS.sendFriendRequestURL;
+    } else if (action == "Accept") {
+      url = ApiURLS.acceptFriendRequestURL;
+    } else if (action == "Decline") {
+      url = ApiURLS.declineFriendRequestURL;
+    } else if (action == "RemoveFriend") {
+      url = ApiURLS.removeFromFriendURL;
+    } else if (action == "CancelRequest") {
+      url = ApiURLS.cancelFriendRequestURL;
+    }
+
+    friendshpBloc.asPerActionPassUrl(dict, url);
   }
 
   ButtonStyle getStyle() {

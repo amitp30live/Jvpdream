@@ -75,4 +75,17 @@ class FriendsRepository {
     return friendApiProvider.getCurrentStatus(
         reqData, ApiURLS.getFriendStatusURL, headerparams);
   }
+
+  Future<FriendDataResponse> doAsPerRequested(
+      Map<String, String> reqData, String url) async {
+    /*authorization:bearer eyJhbGc
+    */
+
+    var headerparams = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'authorization': 'bearer ${Auth.authUser.accessToken}'
+    };
+
+    return friendApiProvider.getCurrentStatus(reqData, url, headerparams);
+  }
 }

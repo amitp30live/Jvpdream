@@ -135,8 +135,10 @@ Padding(
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    OtherUserProfile(otherUser: locationModel.userModel)));
+                builder: (context) => OtherUserProfile(
+                      otherUser: locationModel.userModel,
+                      locationModel: locationModel,
+                    )));
         print("Column clicked");
       },
       child: Padding(
