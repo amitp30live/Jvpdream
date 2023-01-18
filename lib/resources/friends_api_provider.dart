@@ -2,12 +2,9 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:jvdream/models/base_response.dart';
 import 'package:jvdream/models/friend_model.dart';
-import 'package:jvdream/models/location_model.dart';
-import 'package:jvdream/resources/api_urls.dart';
-import 'package:jvdream/models/user_model.dart';
 import 'package:jvdream/resources/store_preference.dart';
 
-class FriendsApiProvider with CheckInternetConnection, StorePreferneceData {
+class FriendsApiProvider with CheckInternetConnection {
   Client client = Client();
 
   Future<FriendDataResponse> getCurrentStatus(Map<String, String> body,

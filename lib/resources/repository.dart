@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:jvdream/models/friend_model.dart';
 import 'package:jvdream/models/location_model.dart';
+import 'package:jvdream/models/post_model.dart';
 import 'package:jvdream/models/user_model.dart';
 import 'package:jvdream/resources/api_urls.dart';
 import 'package:jvdream/resources/auth_api_provider.dart';
 import 'package:jvdream/resources/friends_api_provider.dart';
+import 'package:jvdream/resources/post_api_provider.dart';
 import 'package:jvdream/resources/store_preference.dart';
 
 class AuthRepository {
@@ -88,4 +90,34 @@ class FriendsRepository {
 
     return friendApiProvider.getCurrentStatus(reqData, url, headerparams);
   }
+}
+
+class PostsRepository {
+  final postApiProvider = PostAPIProvider();
+
+  Future<PostDataResponse> getPostListData(
+      Map<String, String> reqData, String url) async {
+    /*authorization:bearer eyJhbGc
+    */
+
+    var headerparams = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'authorization': 'bearer ${Auth.authUser.accessToken}'
+    };
+
+    return postApiProvider.getPostList(reqData, url, headerparams);
+  }
+
+  // Future<FriendDataResponse> doAsPerRequested(
+  //     Map<String, String> reqData, String url) async {
+  //   /*authorization:bearer eyJhbGc
+  //   */
+
+  //   var headerparams = {
+  //     'Content-Type': 'application/x-www-form-urlencoded',
+  //     'authorization': 'bearer ${Auth.authUser.accessToken}'
+  //   };
+
+  //   return friendApiProvider.getCurrentStatus(reqData, url, headerparams);
+  // }
 }

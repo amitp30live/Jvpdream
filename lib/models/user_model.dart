@@ -58,9 +58,9 @@ class UserModel {
     email = parsedJson["email"];
     phoneNo = parsedJson["phoneNo"].toString();
     sid = parsedJson["_id"].toString();
-    friendList = parsedJson["friendList"];
-    accessToken = parsedJson["accessToken"];
-    refreshToken = parsedJson["refreshToken"];
+    // friendList = parsedJson["friendList"];
+    // accessToken = parsedJson["accessToken"];
+    // refreshToken = parsedJson["refreshToken"];
   }
   UserModel.dummy() {
     UserModel(
