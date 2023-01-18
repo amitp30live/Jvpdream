@@ -23,4 +23,11 @@ class ApiURLS {
   //friends/declineFriendRequest
   //friends/cancelFriendRequest
   //friends/getFriendList
+
+  static const addPostURL = "${baseUrl}posts/addPost";
+  static const updatePostURL = "${baseUrl}posts/updatePost";
+
+  static const getPostsIdURL = "${baseUrl}posts/fetchPostPerUser";
+  static const getAllPostsURL = "${baseUrl}posts/fetchAllPost";
+  static const likePostURL = "${baseUrl}posts/likePost";
 }

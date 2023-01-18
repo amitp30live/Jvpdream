@@ -105,6 +105,20 @@ Padding(
       ),
     );
 */
+  Widget imgProfile() {
+    // https://picsum.photos/200
+    return CircleAvatar(
+      // radius: 56,
+      minRadius: 35,
+      maxRadius: 35,
+      backgroundColor: Colors.grey[350],
+      child: Padding(
+        padding: const EdgeInsets.all(2), // Border radius
+        child: ClipOval(child: Image.network('https://picsum.photos/200')),
+      ),
+    );
+  }
+
   Widget asyncAPICallBindFutureList() {
     return FutureBuilder(
         future: datacall(),
@@ -149,13 +163,26 @@ Padding(
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CommonWidgets.textWidget(
-                  '${locationModel.userModel.firstName} ${locationModel.userModel.lastName}',
+                imgProfile(),
+                Container(
+                  width: 10,
                 ),
-                CommonWidgets.textWidget(
-                  'Away: ${locationModel.distance}',
-                  weight: FontWeight.normal,
-                )
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CommonWidgets.textWidget(
+                      '${locationModel.userModel.firstName} ${locationModel.userModel.lastName}',
+                    ),
+                    Container(
+                      height: 6,
+                    ),
+                    CommonWidgets.textWidget(
+                      'Away: ${locationModel.distance}',
+                      weight: FontWeight.normal,
+                    ),
+                  ],
+                ),
+                Spacer()
               ],
             ),
             Container(
