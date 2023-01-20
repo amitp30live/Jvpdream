@@ -104,14 +104,6 @@ class _PostsUIState extends State<PostsUI> {
                 Container(
                   height: 8,
                 ),
-                Image.file(
-                  File(
-                      '/Users/amitprajapati/Documents/Be_AP_22/NODE life/NodeCrud/${postModel.imagePath}'),
-                  height: 150,
-                ),
-                Container(
-                  height: 8,
-                ),
                 Row(
                   children: [
                     CommonWidgets.textWidget(
@@ -121,7 +113,15 @@ class _PostsUIState extends State<PostsUI> {
                   ],
                 ),
                 Container(
-                  height: 6,
+                  height: 8,
+                ),
+                Image.file(
+                  File(
+                      '/Users/amitprajapati/Documents/Be_AP_22/NODE life/NodeCrud/${postModel.imagePath}'),
+                  height: 150,
+                ),
+                Container(
+                  height: 8,
                 ),
               ],
             ),
